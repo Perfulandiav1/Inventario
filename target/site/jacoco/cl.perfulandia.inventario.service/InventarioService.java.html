@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>InventarioService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">inventario</a> &gt; <a href="index.source.html" class="el_package">cl.perfulandia.inventario.service</a> &gt; <span class="el_source">InventarioService.java</span></div><h1>InventarioService.java</h1><pre class="source lang-java linenums">package cl.perfulandia.inventario.service;
+import java.util.Collections;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import cl.perfulandia.inventario.dto.SucursalDTO;
+import cl.perfulandia.inventario.feing.SucursalClient;
+import cl.perfulandia.inventario.modelo.AlertaInventario;
+import cl.perfulandia.inventario.modelo.SucursalStock;
+import cl.perfulandia.inventario.repositorio.AlertaRepositorio;
+import cl.perfulandia.inventario.repositorio.SucursalStockRepositorio;
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class InventarioService {
+    @Autowired
+    private SucursalClient sucursalClient;
+    private final SucursalStockRepositorio sucursalStockRepo;
+    private final AlertaRepositorio alertaRepo;
+
+    public List&lt;SucursalStock&gt; obtenerStockPorSucursal(Long sucursalId) {
+<span class="fc" id="L23">        return sucursalStockRepo.findBySucursalId(sucursalId);</span>
+    }
+
+    public SucursalClient getSucursalClient() {
+<span class="fc" id="L27">        return sucursalClient;</span>
+        
+    }
+
+    public void setSucursalClient(SucursalClient sucursalClient) {
+<span class="fc" id="L32">        this.sucursalClient = sucursalClient;</span>
+        
+<span class="fc" id="L34">    }</span>
+
+    public SucursalDTO obtenerSucursalDetalle(Long sucursalId) {
+<span class="fc" id="L37">        return getSucursalClient().obtenerSucursalPorId(sucursalId);</span>
+    }
+
+    /**
+     * Listar todas las alertas.
+     */
+    public List&lt;AlertaInventario&gt; listarAlertas() {
+<span class="fc" id="L44">        return alertaRepo.findAll();</span>
+    }
+
+    public SucursalDTO obtenerSucursalPorId(Long id) {
+        try {
+<span class="fc" id="L49">            return getSucursalClient().obtenerSucursalPorId(id);</span>
+<span class="fc" id="L50">        } catch (Exception e) {</span>
+<span class="fc" id="L51">            System.err.println(&quot;Error al llamar a Sucursal: &quot; + e.getMessage());</span>
+<span class="fc" id="L52">            return null; // o lanza excepción personalizada</span>
+        }
+    }
+
+    public List&lt;SucursalDTO&gt; obtenerSucursales() {
+        try {
+<span class="fc" id="L58">            return getSucursalClient().obtenerTodasSucursales();</span>
+<span class="fc" id="L59">        } catch (Exception e) {</span>
+            // Loguea o maneja el error según convenga
+<span class="fc" id="L61">            System.err.println(&quot;Error al llamar a Sucursal: &quot; + e.getMessage());</span>
+<span class="fc" id="L62">            return Collections.emptyList(); // o lanza excepción personalizada</span>
+        }
+    }
+}
+
+
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

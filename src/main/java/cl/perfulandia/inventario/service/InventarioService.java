@@ -19,14 +19,22 @@ public class InventarioService {
     private final SucursalStockRepositorio sucursalStockRepo;
     private final AlertaRepositorio alertaRepo;
 
-    
-
     public List<SucursalStock> obtenerStockPorSucursal(Long sucursalId) {
         return sucursalStockRepo.findBySucursalId(sucursalId);
     }
 
+    public SucursalClient getSucursalClient() {
+        return sucursalClient;
+        
+    }
+
+    public void setSucursalClient(SucursalClient sucursalClient) {
+        this.sucursalClient = sucursalClient;
+        
+    }
+
     public SucursalDTO obtenerSucursalDetalle(Long sucursalId) {
-        return sucursalClient.obtenerSucursalPorId(sucursalId);
+        return getSucursalClient().obtenerSucursalPorId(sucursalId);
     }
 
     /**
@@ -38,7 +46,7 @@ public class InventarioService {
 
     public SucursalDTO obtenerSucursalPorId(Long id) {
         try {
-            return sucursalClient.obtenerSucursalPorId(id);
+            return getSucursalClient().obtenerSucursalPorId(id);
         } catch (Exception e) {
             System.err.println("Error al llamar a Sucursal: " + e.getMessage());
             return null; // o lanza excepción personalizada
@@ -47,7 +55,7 @@ public class InventarioService {
 
     public List<SucursalDTO> obtenerSucursales() {
         try {
-            return sucursalClient.obtenerTodasSucursales();
+            return getSucursalClient().obtenerTodasSucursales();
         } catch (Exception e) {
             // Loguea o maneja el error según convenga
             System.err.println("Error al llamar a Sucursal: " + e.getMessage());

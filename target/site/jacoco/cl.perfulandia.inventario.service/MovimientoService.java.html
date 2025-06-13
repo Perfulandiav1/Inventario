@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MovimientoService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">inventario</a> &gt; <a href="index.source.html" class="el_package">cl.perfulandia.inventario.service</a> &gt; <span class="el_source">MovimientoService.java</span></div><h1>MovimientoService.java</h1><pre class="source lang-java linenums">package cl.perfulandia.inventario.service;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import cl.perfulandia.inventario.modelo.AlertaInventario;
+import cl.perfulandia.inventario.modelo.Movimiento;
+import cl.perfulandia.inventario.modelo.Producto;
+import cl.perfulandia.inventario.modelo.SucursalStock;
+import cl.perfulandia.inventario.repositorio.AlertaRepositorio;
+import cl.perfulandia.inventario.repositorio.MovimientoRepositorio;
+import cl.perfulandia.inventario.repositorio.ProductoRepositorio;
+import cl.perfulandia.inventario.repositorio.SucursalStockRepositorio;
+
+@Service
+<span class="fc" id="L17">public class MovimientoService {</span>
+    @Autowired
+    private MovimientoRepositorio movimientoRepo;
+    @Autowired
+    private SucursalStockRepositorio sucursalStockRepo;
+    @Autowired
+    private ProductoRepositorio productoRepo;
+    @Autowired
+    private AlertaRepositorio alertaRepo;
+
+    public Movimiento registrarMovimiento(Long sucursalId, Long productoId, Integer cantidad, String tipo) {
+        // Validar tipo de movimiento
+<span class="nc bnc" id="L29" title="All 4 branches missed.">        if (!tipo.equalsIgnoreCase(&quot;ENTRADA&quot;) &amp;&amp; !tipo.equalsIgnoreCase(&quot;SALIDA&quot;)) {</span>
+<span class="nc" id="L30">            throw new IllegalArgumentException(&quot;Tipo de movimiento inválido. Debe ser ENTRADA o SALIDA.&quot;);</span>
+        }
+
+        // Buscar producto
+<span class="nc" id="L34">        Producto producto = productoRepo.findById(productoId)</span>
+<span class="nc" id="L35">            .orElseThrow(() -&gt; new RuntimeException(&quot;Producto no encontrado&quot;));</span>
+
+        // Buscar o crear SucursalStock
+<span class="nc" id="L38">        SucursalStock stock = sucursalStockRepo.findAll().stream()</span>
+<span class="nc bnc" id="L39" title="All 4 branches missed.">            .filter(s -&gt; s.getSucursalId().equals(sucursalId) &amp;&amp; s.getProducto().getId().equals(productoId))</span>
+<span class="nc" id="L40">            .findFirst()</span>
+<span class="nc" id="L41">            .orElseGet(() -&gt; {</span>
+<span class="nc" id="L42">                SucursalStock nuevo = new SucursalStock();</span>
+<span class="nc" id="L43">                nuevo.setSucursalId(sucursalId);</span>
+<span class="nc" id="L44">                nuevo.setProducto(producto);</span>
+<span class="nc" id="L45">                nuevo.setStock(0);</span>
+<span class="nc" id="L46">                return nuevo;</span>
+            });
+
+        // Calcular nuevo stock
+<span class="nc bnc" id="L50" title="All 2 branches missed.">        int nuevoStock = stock.getStock() + (tipo.equalsIgnoreCase(&quot;ENTRADA&quot;) ? cantidad : -cantidad);</span>
+<span class="nc bnc" id="L51" title="All 2 branches missed.">        if (nuevoStock &lt; 0) {</span>
+<span class="nc" id="L52">            throw new IllegalStateException(&quot;Stock insuficiente para realizar la salida.&quot;);</span>
+        }
+<span class="nc" id="L54">        stock.setStock(nuevoStock);</span>
+<span class="nc" id="L55">        sucursalStockRepo.save(stock);</span>
+
+        // Registrar el movimiento
+<span class="nc" id="L58">        Movimiento movimiento = new Movimiento();</span>
+<span class="nc" id="L59">        movimiento.setProducto(producto);</span>
+<span class="nc" id="L60">        movimiento.setSucursalId(sucursalId);</span>
+<span class="nc" id="L61">        movimiento.setCantidad(cantidad);</span>
+<span class="nc" id="L62">        movimiento.setTipo(tipo);</span>
+<span class="nc" id="L63">        movimiento.setFechaHora(LocalDateTime.now());</span>
+<span class="nc" id="L64">        movimientoRepo.save(movimiento);</span>
+
+        // Verificar si el stock es bajo y crear alerta
+<span class="nc bnc" id="L67" title="All 2 branches missed.">        if (stock.getStock() &lt; 5) { // Aquí 5 es el umbral mínimo. Puedes parametrizarlo.</span>
+<span class="nc" id="L68">            AlertaInventario alerta = new AlertaInventario();</span>
+<span class="nc" id="L69">            alerta.setProductoId(producto.getId());</span>
+<span class="nc" id="L70">            alerta.setSucursalId(sucursalId);</span>
+<span class="nc" id="L71">            alerta.setStockActual(stock.getStock());</span>
+<span class="nc" id="L72">            alerta.setMensaje(&quot;Stock bajo para producto &quot; + producto.getNombre());</span>
+<span class="nc" id="L73">            alerta.setFechaHora(LocalDateTime.now());</span>
+<span class="nc" id="L74">            alertaRepo.save(alerta);</span>
+        }
+
+<span class="nc" id="L77">        return movimiento;</span>
+    }
+
+        
+    public List&lt;Movimiento&gt; listarMovimientos() {
+<span class="nc" id="L82">        return movimientoRepo.findAll();</span>
+    }
+
+    public Movimiento obtenerMovimientoPorId(Long id) {
+<span class="nc" id="L86">        return movimientoRepo.findById(id)</span>
+<span class="nc" id="L87">            .orElseThrow(() -&gt; new RuntimeException(&quot;Movimiento no encontrado&quot;));</span>
+    }
+
+    public List&lt;Movimiento&gt; listarPorSucursal(Long sucursalId) {
+<span class="nc" id="L91">        return movimientoRepo.findBySucursalId(sucursalId);</span>
+    }
+
+    public List&lt;Movimiento&gt; listarPorProducto(Long productoId) {
+<span class="nc" id="L95">        return movimientoRepo.findByProductoId(productoId);</span>
+    }
+
+    public void eliminarMovimiento(Long id) {
+<span class="nc bnc" id="L99" title="All 2 branches missed.">        if (!movimientoRepo.existsById(id)) {</span>
+<span class="nc" id="L100">            throw new RuntimeException(&quot;Movimiento no encontrado para eliminar&quot;);</span>
+        }
+<span class="nc" id="L102">        movimientoRepo.deleteById(id);</span>
+<span class="nc" id="L103">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>
