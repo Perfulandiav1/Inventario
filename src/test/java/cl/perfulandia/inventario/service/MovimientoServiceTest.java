@@ -50,7 +50,7 @@ class MovimientoServiceTest {
 
         assertEquals("ENTRADA", mov.getTipo());
         assertEquals(2, mov.getCantidad());
-        verify(alertaRepo, times(1)).save(any(AlertaInventario.class)); // stock queda en 5, alerta no, pero si stock inicial < 5 sí
+        verify(alertaRepo, never()).save(any(AlertaInventario.class)); // stock queda en 5, no debe crear alerta
     }
 
     @Test
