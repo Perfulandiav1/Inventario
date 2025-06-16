@@ -1,10 +1,10 @@
 GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
 inventario,cl.perfulandia.inventario.service,InventarioService,0,46,0,0,0,14,0,7,0,7
 inventario,cl.perfulandia.inventario.service,AlertaInventarioService,0,32,0,0,0,8,0,6,0,6
-inventario,cl.perfulandia.inventario.service,ProductoService,67,0,0,0,14,0,7,0,7,0
-inventario,cl.perfulandia.inventario.service,MovimientoService,201,3,16,0,43,1,18,1,10,1
-inventario,cl.perfulandia.inventario.controlador,AlertaController,24,3,0,0,4,1,4,1,4,1
-inventario,cl.perfulandia.inventario.controlador,MovimientoController,45,3,0,0,9,1,6,1,6,1
-inventario,cl.perfulandia.inventario.controlador,InventarioControlador,24,0,0,0,5,0,4,0,4,0
-inventario,cl.perfulandia.inventario.controlador,ProductoController,31,0,0,0,6,0,5,0,5,0
+inventario,cl.perfulandia.inventario.service,ProductoService,0,67,0,0,0,14,0,7,0,7
+inventario,cl.perfulandia.inventario.service,MovimientoService,16,188,2,14,5,39,3,16,1,10
+inventario,cl.perfulandia.inventario.controlador,AlertaController,0,27,0,0,0,5,0,5,0,5
+inventario,cl.perfulandia.inventario.controlador,MovimientoController,0,48,0,0,0,10,0,7,0,7
+inventario,cl.perfulandia.inventario.controlador,InventarioControlador,0,24,0,0,0,5,0,4,0,4
+inventario,cl.perfulandia.inventario.controlador,ProductoController,0,31,0,0,0,6,0,5,0,5
 inventario,cl.perfulandia.inventario,InventarioApplication,5,3,0,0,2,1,1,1,1,1

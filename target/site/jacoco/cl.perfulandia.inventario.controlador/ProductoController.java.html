@@ -25,28 +25,28 @@ public class ProductoController {
 
     @GetMapping(&quot;/listar&quot;)
     public ResponseEntity&lt;List&lt;Producto&gt;&gt; listarProductos() {
-<span class="nc" id="L28">        return ResponseEntity.ok(productoService.listarProductos());</span>
+<span class="fc" id="L28">        return ResponseEntity.ok(productoService.listarProductos());</span>
     }
 
     @GetMapping(&quot;/obtener/{id}&quot;)
     public ResponseEntity&lt;Producto&gt; obtenerProductoPorId(@PathVariable Long id) {
-<span class="nc" id="L33">        return ResponseEntity.ok(productoService.obtenerProductoPorId(id));</span>
+<span class="fc" id="L33">        return ResponseEntity.ok(productoService.obtenerProductoPorId(id));</span>
     }
 
     @PostMapping(&quot;/agregar&quot;)
     public ResponseEntity&lt;Producto&gt; crearProducto(@RequestBody Producto producto) {
-<span class="nc" id="L38">        return ResponseEntity.ok(productoService.crearProducto(producto));</span>
+<span class="fc" id="L38">        return ResponseEntity.ok(productoService.crearProducto(producto));</span>
     }
 
     @PutMapping(&quot;/actualizar/{id}&quot;)
     public ResponseEntity&lt;Producto&gt; actualizarProducto(@PathVariable Long id, @RequestBody Producto producto) {
-<span class="nc" id="L43">        return ResponseEntity.ok(productoService.actualizarProducto(id, producto));</span>
+<span class="fc" id="L43">        return ResponseEntity.ok(productoService.actualizarProducto(id, producto));</span>
     }
 
     @DeleteMapping(&quot;/eliminar/{id}&quot;)
     public ResponseEntity&lt;Void&gt; eliminarProducto(@PathVariable Long id) {
-<span class="nc" id="L48">        productoService.eliminarProducto(id);</span>
-<span class="nc" id="L49">        return ResponseEntity.noContent().build();</span>
+<span class="fc" id="L48">        productoService.eliminarProducto(id);</span>
+<span class="fc" id="L49">        return ResponseEntity.noContent().build();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

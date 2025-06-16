@@ -15,33 +15,33 @@ public class ProductoService {
     private final ProductoRepositorio productoRepository;
 
     public List&lt;Producto&gt; listarProductos() {
-<span class="nc" id="L18">        return productoRepository.findAll();</span>
+<span class="fc" id="L18">        return productoRepository.findAll();</span>
     }
 
     public Producto obtenerProductoPorId(Long sucursalId) {
-<span class="nc" id="L22">        return productoRepository.findById(sucursalId)</span>
-<span class="nc" id="L23">                .orElseThrow(() -&gt; new RuntimeException(&quot;Producto no encontrado&quot;));</span>
+<span class="fc" id="L22">        return productoRepository.findById(sucursalId)</span>
+<span class="fc" id="L23">                .orElseThrow(() -&gt; new RuntimeException(&quot;Producto no encontrado&quot;));</span>
     }
 
     public Producto crearProducto(Producto producto) {
-<span class="nc" id="L27">        return productoRepository.save(producto);</span>
+<span class="fc" id="L27">        return productoRepository.save(producto);</span>
     }
 
     public Producto actualizarProducto(Long sucursalId, Producto productoActualizado) {
-<span class="nc" id="L31">        Producto producto = productoRepository.findById(sucursalId)</span>
-<span class="nc" id="L32">                .orElseThrow(() -&gt; new RuntimeException(&quot;Producto no encontrado&quot;));</span>
+<span class="fc" id="L31">        Producto producto = productoRepository.findById(sucursalId)</span>
+<span class="fc" id="L32">                .orElseThrow(() -&gt; new RuntimeException(&quot;Producto no encontrado&quot;));</span>
         
-<span class="nc" id="L34">        producto.setNombre(productoActualizado.getNombre());</span>
-<span class="nc" id="L35">        producto.setDescripcion(productoActualizado.getDescripcion());</span>
-<span class="nc" id="L36">        producto.setStock(productoActualizado.getStock());</span>
-<span class="nc" id="L37">        producto.setStockMinimo(productoActualizado.getStockMinimo());</span>
-<span class="nc" id="L38">        producto.setPrecio(productoActualizado.getPrecio());</span>
+<span class="fc" id="L34">        producto.setNombre(productoActualizado.getNombre());</span>
+<span class="fc" id="L35">        producto.setDescripcion(productoActualizado.getDescripcion());</span>
+<span class="fc" id="L36">        producto.setStock(productoActualizado.getStock());</span>
+<span class="fc" id="L37">        producto.setStockMinimo(productoActualizado.getStockMinimo());</span>
+<span class="fc" id="L38">        producto.setPrecio(productoActualizado.getPrecio());</span>
 
-<span class="nc" id="L40">        return productoRepository.save(producto);</span>
+<span class="fc" id="L40">        return productoRepository.save(producto);</span>
     }
 
     public void eliminarProducto(Long sucursalId) {
-<span class="nc" id="L44">        productoRepository.deleteById(sucursalId);</span>
-<span class="nc" id="L45">    }</span>
+<span class="fc" id="L44">        productoRepository.deleteById(sucursalId);</span>
+<span class="fc" id="L45">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

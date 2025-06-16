@@ -22,23 +22,23 @@ public class InventarioControlador {
 
     @GetMapping(&quot;/stock/{sucursalId}&quot;)
     public ResponseEntity&lt;List&lt;SucursalStock&gt;&gt; obtenerStock(@PathVariable Long sucursalId) {
-<span class="nc" id="L25">        return ResponseEntity.ok(inventarioService.obtenerStockPorSucursal(sucursalId));</span>
+<span class="fc" id="L25">        return ResponseEntity.ok(inventarioService.obtenerStockPorSucursal(sucursalId));</span>
     }
 
     @GetMapping(&quot;/alertas&quot;)
     public ResponseEntity&lt;List&lt;AlertaInventario&gt;&gt; listarAlertas() {
-<span class="nc" id="L30">        return ResponseEntity.ok(inventarioService.listarAlertas());</span>
+<span class="fc" id="L30">        return ResponseEntity.ok(inventarioService.listarAlertas());</span>
     }
 
     @GetMapping(&quot;/sucursales&quot;)
     public ResponseEntity&lt;List&lt;SucursalDTO&gt;&gt; obtenerSucursales() {
-<span class="nc" id="L35">        List&lt;SucursalDTO&gt; sucursales = inventarioService.obtenerSucursales();</span>
-<span class="nc" id="L36">        return ResponseEntity.ok(sucursales);</span>
+<span class="fc" id="L35">        List&lt;SucursalDTO&gt; sucursales = inventarioService.obtenerSucursales();</span>
+<span class="fc" id="L36">        return ResponseEntity.ok(sucursales);</span>
     }
 
     @GetMapping(&quot;/sucursal/{sucursalId}&quot;)
     public ResponseEntity&lt;SucursalDTO&gt; obtenerSucursal(@PathVariable Long sucursalId) {
-<span class="nc" id="L41">        return ResponseEntity.ok(inventarioService.obtenerSucursalDetalle(sucursalId));</span>
+<span class="fc" id="L41">        return ResponseEntity.ok(inventarioService.obtenerSucursalDetalle(sucursalId));</span>
     }
 
 }

@@ -1,0 +1,9 @@
+cl\perfulandia\inventario\controller\AlertaControllerTest.class
+cl\perfulandia\inventario\controller\InventarioControladorTest.class
+cl\perfulandia\inventario\InventarioApplicationTests.class
+cl\perfulandia\inventario\controller\MovimientoControllerTest.class
+cl\perfulandia\inventario\service\AlertaInventarioServiceTest.class
+cl\perfulandia\inventario\controller\ProductoControllerTest.class
+cl\perfulandia\inventario\service\ProductoServiceTest.class
+cl\perfulandia\inventario\service\InventarioServiceTest.class
+cl\perfulandia\inventario\service\MovimientoServiceTest.class

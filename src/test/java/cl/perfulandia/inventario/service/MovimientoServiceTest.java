@@ -135,4 +135,77 @@ class MovimientoServiceTest {
 
         verify(alertaRepo, times(1)).save(any(AlertaInventario.class));
     }
+
+    @Test
+    void listarMovimientos_debeRetornarLista() {
+        Movimiento mov = new Movimiento();
+        mov.setId(1L);
+        when(movimientoRepo.findAll()).thenReturn(List.of(mov));
+
+        List<Movimiento> resultado = movimientoService.listarMovimientos();
+
+        assertEquals(1, resultado.size());
+        assertEquals(1L, resultado.get(0).getId());
+    }
+
+    @Test
+    void obtenerMovimientoPorId_existente() {
+        Movimiento mov = new Movimiento();
+        mov.setId(1L);
+        when(movimientoRepo.findById(1L)).thenReturn(Optional.of(mov));
+
+        Movimiento resultado = movimientoService.obtenerMovimientoPorId(1L);
+
+        assertEquals(1L, resultado.getId());
+    }
+
+    @Test
+    void obtenerMovimientoPorId_noExistente() {
+        when(movimientoRepo.findById(1L)).thenReturn(Optional.empty());
+
+        Exception ex = assertThrows(RuntimeException.class, () -> movimientoService.obtenerMovimientoPorId(1L));
+        assertTrue(ex.getMessage().contains("Movimiento no encontrado"));
+    }
+
+    @Test
+    void listarPorSucursal_debeRetornarLista() {
+        Movimiento mov = new Movimiento();
+        mov.setId(1L);
+        when(movimientoRepo.findBySucursalId(1L)).thenReturn(List.of(mov));
+
+        List<Movimiento> resultado = movimientoService.listarPorSucursal(1L);
+
+        assertEquals(1, resultado.size());
+        assertEquals(1L, resultado.get(0).getId());
+    }
+
+    @Test
+    void listarPorProducto_debeRetornarLista() {
+        Movimiento mov = new Movimiento();
+        mov.setId(1L);
+        when(movimientoRepo.findByProductoId(2L)).thenReturn(List.of(mov));
+
+        List<Movimiento> resultado = movimientoService.listarPorProducto(2L);
+
+        assertEquals(1, resultado.size());
+        assertEquals(1L, resultado.get(0).getId());
+    }
+
+    @Test
+    void eliminarMovimiento_existente() {
+        when(movimientoRepo.existsById(1L)).thenReturn(true);
+        doNothing().when(movimientoRepo).deleteById(1L);
+
+        movimientoService.eliminarMovimiento(1L);
+
+        verify(movimientoRepo, times(1)).deleteById(1L);
+    }
+
+    @Test
+    void eliminarMovimiento_noExistente() {
+        when(movimientoRepo.existsById(1L)).thenReturn(false);
+
+        Exception ex = assertThrows(RuntimeException.class, () -> movimientoService.eliminarMovimiento(1L));
+        assertTrue(ex.getMessage().contains("Movimiento no encontrado"));
+    }
 }

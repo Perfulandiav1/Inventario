@@ -24,35 +24,35 @@ import cl.perfulandia.inventario.service.MovimientoService;
 
     @PostMapping(&quot;/registrar&quot;)
     public ResponseEntity&lt;Movimiento&gt; registrarMovimiento(@RequestBody MovimientoRequest request) {
-<span class="nc" id="L27">        Movimiento movimiento = movimientoService.registrarMovimiento(</span>
-<span class="nc" id="L28">            request.getSucursalId(), request.getProductoId(), request.getCantidad(), request.getTipo());</span>
-<span class="nc" id="L29">        return ResponseEntity.ok(movimiento);</span>
+<span class="fc" id="L27">        Movimiento movimiento = movimientoService.registrarMovimiento(</span>
+<span class="fc" id="L28">            request.getSucursalId(), request.getProductoId(), request.getCantidad(), request.getTipo());</span>
+<span class="fc" id="L29">        return ResponseEntity.ok(movimiento);</span>
     }
 
     @GetMapping(&quot;/Listar&quot;)
     public ResponseEntity&lt;List&lt;Movimiento&gt;&gt; listarMovimientos() {
-<span class="nc" id="L34">        return ResponseEntity.ok(movimientoService.listarMovimientos());</span>
+<span class="fc" id="L34">        return ResponseEntity.ok(movimientoService.listarMovimientos());</span>
     }
 
     @GetMapping(&quot;/obtener/{id}&quot;)
     public ResponseEntity&lt;Movimiento&gt; obtenerMovimiento(@PathVariable Long id) {
-<span class="nc" id="L39">        return ResponseEntity.ok(movimientoService.obtenerMovimientoPorId(id));</span>
+<span class="fc" id="L39">        return ResponseEntity.ok(movimientoService.obtenerMovimientoPorId(id));</span>
     }
 
     @GetMapping(&quot;/sucursal/{sucursalId}&quot;)
     public ResponseEntity&lt;List&lt;Movimiento&gt;&gt; movimientosPorSucursal(@PathVariable Long sucursalId) {
-<span class="nc" id="L44">        return ResponseEntity.ok(movimientoService.listarPorSucursal(sucursalId));</span>
+<span class="fc" id="L44">        return ResponseEntity.ok(movimientoService.listarPorSucursal(sucursalId));</span>
     }
 
     @GetMapping(&quot;/producto/{productoId}&quot;)
     public ResponseEntity&lt;List&lt;Movimiento&gt;&gt; movimientosPorProducto(@PathVariable Long productoId) {
-<span class="nc" id="L49">        return ResponseEntity.ok(movimientoService.listarPorProducto(productoId));</span>
+<span class="fc" id="L49">        return ResponseEntity.ok(movimientoService.listarPorProducto(productoId));</span>
     }
 
     @DeleteMapping(&quot;/eliminar/{id}&quot;)
     public ResponseEntity&lt;Void&gt; eliminarMovimiento(@PathVariable Long id) {
-<span class="nc" id="L54">        movimientoService.eliminarMovimiento(id);</span>
-<span class="nc" id="L55">        return ResponseEntity.noContent().build();</span>
+<span class="fc" id="L54">        movimientoService.eliminarMovimiento(id);</span>
+<span class="fc" id="L55">        return ResponseEntity.noContent().build();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

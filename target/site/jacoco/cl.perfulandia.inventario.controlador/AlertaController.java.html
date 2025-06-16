@@ -19,22 +19,22 @@ import cl.perfulandia.inventario.service.AlertaInventarioService;
 
     @GetMapping(&quot;/listar&quot;)
     public ResponseEntity&lt;List&lt;AlertaInventario&gt;&gt; listarTodas() {
-<span class="nc" id="L22">        return ResponseEntity.ok(alertaService.obtenerTodasAlertas());</span>
+<span class="fc" id="L22">        return ResponseEntity.ok(alertaService.obtenerTodasAlertas());</span>
     }
 
     @GetMapping(&quot;/obtener/sucursal/{sucursalId}&quot;)
     public ResponseEntity&lt;List&lt;AlertaInventario&gt;&gt; listarPorSucursal(@PathVariable Long sucursalId) {
-<span class="nc" id="L27">        return ResponseEntity.ok(alertaService.obtenerAlertasPorSucursal(sucursalId));</span>
+<span class="fc" id="L27">        return ResponseEntity.ok(alertaService.obtenerAlertasPorSucursal(sucursalId));</span>
     }
 
     @GetMapping(&quot;/obtener/producto/{productoId}&quot;)
     public ResponseEntity&lt;List&lt;AlertaInventario&gt;&gt; listarPorProducto(@PathVariable Long productoId) {
-<span class="nc" id="L32">        return ResponseEntity.ok(alertaService.obtenerAlertasPorProducto(productoId));</span>
+<span class="fc" id="L32">        return ResponseEntity.ok(alertaService.obtenerAlertasPorProducto(productoId));</span>
     }
 
     @GetMapping(&quot;/obtener/sucursal/{sucursalId}/producto/{productoId}&quot;)
     public ResponseEntity&lt;List&lt;AlertaInventario&gt;&gt; listarPorSucursalYProducto(@PathVariable Long sucursalId, @PathVariable Long productoId) {
-<span class="nc" id="L37">        return ResponseEntity.ok(alertaService.obtenerAlertasPorSucursalYProducto(sucursalId, productoId));</span>
+<span class="fc" id="L37">        return ResponseEntity.ok(alertaService.obtenerAlertasPorSucursalYProducto(sucursalId, productoId));</span>
     }
 }
 
