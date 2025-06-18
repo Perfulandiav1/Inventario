@@ -45,7 +45,7 @@ public class MovimientoController {
         @ApiResponse(responseCode = "200", description = "Movimiento registrado correctamente", content = @Content(mediaType = "application/json", schema = @Schema(implementation = Movimiento.class))),
         @ApiResponse(responseCode = "400", description = "Solicitud inválida")
     })
-    @PostMapping("/crear")
+    @PostMapping("/registrar")
     public ResponseEntity<EntityModel<Movimiento>> registrarMovimiento(@RequestBody Movimiento movimiento) {
         logger.info("Registrando movimiento: {}", movimiento);
         if (movimiento.getSucursalId() == null || movimiento.getProducto() == null || movimiento.getCantidad() <= 0 || movimiento.getTipo() == null) {
