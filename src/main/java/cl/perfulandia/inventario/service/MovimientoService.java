@@ -2,7 +2,6 @@ package cl.perfulandia.inventario.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,18 +15,47 @@ import cl.perfulandia.inventario.repositorio.MovimientoRepositorio;
 import cl.perfulandia.inventario.repositorio.ProductoRepositorio;
 import cl.perfulandia.inventario.repositorio.SucursalStockRepositorio;
 
+/**
+ * MovimientoService.java
+ * Este servicio maneja las operaciones relacionadas con los movimientos de inventario.
+ * Permite registrar, listar, obtener y eliminar movimientos de inventario.
+ */
 @Service
 public class MovimientoService {
+    /**
+     * Logger para registrar eventos en el servicio de movimientos.
+     * Utilizado para depuración y seguimiento de operaciones.
+     */
     private static final Logger logger = LoggerFactory.getLogger(MovimientoService.class);
+    /**
+     * Repositorio para acceder a los datos de movimientos de inventario.
+     * Proporciona métodos para buscar, guardar y eliminar movimientos.
+     */
     @Autowired
     private MovimientoRepositorio movimientoRepo;
+    /*
+     * Repositorio para acceder a los datos de stock de sucursales.
+     * Proporciona métodos para buscar y guardar el stock de productos en sucursales.
+     */
     @Autowired
     private SucursalStockRepositorio sucursalStockRepo;
+    /**
+     * Repositorio para acceder a los datos de productos.
+     * Proporciona métodos para buscar productos por ID.
+     */
     @Autowired
     private ProductoRepositorio productoRepo;
+    /**
+     * Repositorio para acceder a las alertas de inventario.
+     * Proporciona métodos para guardar y buscar alertas relacionadas con el stock de productos.
+     */
     @Autowired
     private AlertaRepositorio alertaRepo;
 
+    /**
+     * Constructor del servicio de movimientos.
+     * Inyecta los repositorios necesarios para realizar operaciones de acceso a datos.
+     */
     public Movimiento registrarMovimiento(Long sucursalId, Long productoId, Integer cantidad, String tipo) {
         // Validar tipo de movimiento
         logger.info("Registrando movimiento: Sucursal ID={}, Producto ID={}, Cantidad={}, Tipo={}", sucursalId, productoId, cantidad, tipo);
@@ -98,7 +126,10 @@ public class MovimientoService {
         return movimiento;
     }
 
-        
+    /**
+     * Listar todos los movimientos de inventario.
+     * @return Lista de movimientos de inventario.
+     */        
     public List<Movimiento> listarMovimientos() {
         logger.info("Listando todos los movimientos de inventario");
          // Obtener todos los movimientos
@@ -110,6 +141,13 @@ public class MovimientoService {
         return movimientos;
     }
 
+    /**
+     * Obtener un movimiento específico por su ID.
+     * @param id ID del movimiento a obtener.
+     * @return Movimiento encontrado.
+     * @throws IllegalArgumentException si el ID es nulo.
+     * @throws RuntimeException si el movimiento no se encuentra.
+     */
     public Movimiento obtenerMovimientoPorId(Long id) {
         logger.info("Obteniendo movimiento con ID: {}", id);
         if (id == null) {
@@ -127,6 +165,12 @@ public class MovimientoService {
             .orElseThrow(() -> new RuntimeException("Movimiento no encontrado"));
     }
 
+    /**
+     * Listar movimientos por ID de sucursal.
+     * @param sucursalId ID de la sucursal para filtrar los movimientos.
+     * @return Lista de movimientos asociados a la sucursal.
+     * @throws IllegalArgumentException si el ID de sucursal es nulo.
+     */
     public List<Movimiento> listarPorSucursal(Long sucursalId) {
         logger.info("Listando movimientos para la sucursal con ID: {}", sucursalId);
         if (sucursalId == null) {
@@ -137,6 +181,12 @@ public class MovimientoService {
         return movimientoRepo.findBySucursalId(sucursalId);
     }
 
+    /**
+     * Listar movimientos por ID de producto.
+     * @param productoId ID del producto para filtrar los movimientos.
+     * @return Lista de movimientos asociados al producto.
+     * @throws IllegalArgumentException si el ID de producto es nulo.
+     */
     public List<Movimiento> listarPorProducto(Long productoId) {
         logger.info("Listando movimientos para el producto con ID: {}", productoId);
         if (productoId == null) {
@@ -146,6 +196,12 @@ public class MovimientoService {
         return movimientoRepo.findByProductoId(productoId);
     }
 
+    /**
+     * Eliminar un movimiento por su ID.
+     * @param id ID del movimiento a eliminar.
+     * @throws IllegalArgumentException si el ID es nulo.
+     * @throws RuntimeException si el movimiento no se encuentra.
+     */
     public void eliminarMovimiento(Long id) {
         logger.info("Eliminando movimiento con ID: {}", id);
         if (id == null) {

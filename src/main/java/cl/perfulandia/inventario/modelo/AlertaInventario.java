@@ -6,6 +6,11 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GenerationType;
 import lombok.Data;
 
+/**
+ * AlertaInventario.java
+ * Este modelo representa una alerta de inventario en el sistema.
+ * Contiene información sobre el producto, la sucursal, el stock actual, un mensaje y la fecha y hora de la alerta.
+ */	
 @Entity
 @Data
 public class AlertaInventario {

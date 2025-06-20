@@ -6,10 +6,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Producto.java
+ * Este modelo representa un producto en el sistema de inventario.
+ * Contiene información básica sobre el producto, como su ID, nombre, descripción, stock, stock mínimo, precio y stock total.
+ */
 @Entity
 @Table(name = "producto")
 @Data

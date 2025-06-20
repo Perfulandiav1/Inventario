@@ -25,24 +25,49 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
+/*
+ * Controller para manejar las alertas de inventario.
+ * Proporciona endpoints para listar todas las alertas, obtener alertas por ID de sucursal , entre otras.
+ */
 @RestController
 @RequestMapping("/api/alertas")
 @Tag(name = "Alertas", description = "Operaciones relacionadas con las alertas de inventario")
 public class AlertaController {
+
+    /*
+     * Logger para registrar eventos en el controlador de alertas.
+     * Utilizado para depuración y seguimiento de operaciones.
+     */
     private static final Logger logger = LoggerFactory.getLogger(AlertaController.class);
+    /*
+     * Servicio para manejar la lógica de negocio relacionada con las alertas de inventario.
+     * Proporciona métodos para obtener alertas por sucursal, producto y otras operaciones relacionadas.
+     */
     @Autowired
     private AlertaInventarioService alertaService;
     private AlertaInventarioModelAssembler alertaModelAssembler;
 
+    /*
+     * Constructor del controlador de alertas.
+     * Inyecta el servicio de alertas y el ensamblador de modelos para convertir entidades en modelos HATEOAS.
+     */
     public AlertaController(AlertaInventarioService alertaService, AlertaInventarioModelAssembler alertaModelAssembler) {
         this.alertaService = alertaService;
         this.alertaModelAssembler = alertaModelAssembler;
     }
 
+    /*
+     * Endpoint para listar todas las alertas de inventario.
+     * Retorna una colección de modelos de alerta con enlaces HATEOAS.
+     * Utiliza el ensamblador de modelos para convertir las entidades en modelos enriquecidos.
+     */
     @Operation(summary = "Listar todas las alertas", description = "Obtiene una lista con todas las alertas registradas.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista de alertas obtenida correctamente", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AlertaInventario.class)))
     })
+    /*
+     * Endpoint para listar todas las alertas de inventario.
+     */
     @GetMapping("/listar")
     public CollectionModel<EntityModel<AlertaInventario>> listarTodas() {
         logger.info("Listando todas las alertas de inventario");
@@ -54,12 +79,20 @@ public class AlertaController {
         return CollectionModel.of(alertasModel)
                 .add(linkTo(methodOn(AlertaController.class).listarTodas()).withSelfRel());
     }
-    //
+    /*
+     * Endpoint para obtener una alerta específica por su ID de sucursal.
+     * Retorna un modelo de alerta con enlaces HATEOAS.
+     * Utiliza el ensamblador de modelos para convertir la entidad en un modelo enriquecido.
+     */
     @Operation(summary = "Obtener alerta por ID de sucursal", description = "Obtiene una alerta específica por su ID de sucursal.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Alerta obtenida correctamente", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AlertaInventario.class))),
             @ApiResponse(responseCode = "404", description = "Alerta no encontrada")
     })
+    /*
+     * Endpoint para obtener una alerta específica por su ID de sucursal.
+     * @param sucursalId ID de la sucursal para la cual se desea obtener la alerta.
+     */
     @GetMapping("/obtener/{id}")
     public EntityModel<AlertaInventario> obtenerPorId(@PathVariable Long sucursalId) {
         logger.info("Obteniendo alerta para la sucursal con ID: {}", sucursalId);
@@ -72,12 +105,19 @@ public class AlertaController {
         logger.info("Alerta obtenida correctamente para la sucursal con ID: {}", sucursalId);
         return alertaModelAssembler.toModel(alerta);
     }
-    //
+    /*
+     * Endpoint para listar alertas por ID de producto.
+     * Retorna una lista de alertas asociadas a un producto específico.
+     */
     @Operation(summary = "Listar alertas por producto id", description = "Obtiene una lista de alertas asociadas a un producto específico.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista de alertas obtenida correctamente", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AlertaInventario.class))),
             @ApiResponse(responseCode = "404", description = "No se encontraron alertas para el producto")
     })
+    /*
+     * Endpoint para listar alertas por ID de producto.
+     * @param productoId ID del producto para el cual se desean obtener las alertas.
+     */
     @GetMapping("/obtener/producto/{productoId}")
     public ResponseEntity<List<AlertaInventario>> listarPorProducto(@PathVariable Long productoId) {
         logger.info("Listando alertas para el producto con ID: {}", productoId);
@@ -89,12 +129,19 @@ public class AlertaController {
         logger.info("Alertas obtenidas correctamente para el producto con ID: {}", productoId);
         return ResponseEntity.ok(alertas);
     }
-    //
+    /*
+     * Endpoint para listar alertas por ID de sucursal y ID de producto.
+     * Retorna una lista de alertas asociadas a una sucursal específica y un producto específico.
+     */
     @Operation(summary = "Listar alertas por sucursal id y producto id", description = "Obtiene una lista de alertas asociadas a una sucursal específica y un producto específico.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Lista de alertas obtenida correctamente", content = @Content(mediaType = "application/json", schema = @Schema(implementation = AlertaInventario.class))),
             @ApiResponse(responseCode = "404", description = "No se encontraron alertas para la sucursal y producto especificados")
     })
+    /*
+     * Endpoint para listar alertas por ID de sucursal y ID de producto.
+     * @param sucursalId ID de la sucursal para la cual se desean obtener las alertas.
+     */
     @GetMapping("/obtener/sucursal/{sucursalId}/producto/{productoId}")
     public ResponseEntity<List<AlertaInventario>> listarPorSucursalYProducto(@PathVariable Long sucursalId, @PathVariable Long productoId) {
         logger.info("Listando alertas para la sucursal con ID: {} y producto con ID: {}", sucursalId, productoId);

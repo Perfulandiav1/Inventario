@@ -13,15 +13,32 @@ import cl.perfulandia.inventario.repositorio.AlertaRepositorio;
 import cl.perfulandia.inventario.repositorio.SucursalStockRepositorio;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * InventarioService.java
+ * Este servicio maneja las operaciones relacionadas con el inventario.
+ * Permite obtener stock por sucursal, listar alertas de inventario y obtener detalles de sucursales.
+ */
 @Service
 @RequiredArgsConstructor
 public class InventarioService {
+    /**
+     * Logger para registrar eventos en el servicio de inventario.
+     * Utilizado para depuración y seguimiento de operaciones.
+     */
     private static final Logger logger = LoggerFactory.getLogger(InventarioService.class);
+    /**
+     * Repositorio para acceder a los datos de stock de sucursales.
+     * Proporciona métodos para buscar stocks por ID de sucursal.
+     */
     @Autowired
     private SucursalClient sucursalClient;
     private final SucursalStockRepositorio sucursalStockRepo;
     private final AlertaRepositorio alertaRepo;
 
+    /**
+     * Constructor del servicio de inventario.
+     * Inyecta el repositorio de stock de sucursales y el repositorio de alertas para realizar operaciones de acceso a datos.
+     */
     public List<SucursalStock> obtenerStockPorSucursal(Long sucursalId) {
         logger.info("Obteniendo stock para la sucursal con ID: {}", sucursalId);
         if (sucursalId == null) {
@@ -36,6 +53,11 @@ public class InventarioService {
         return stock;
     }
 
+    /**
+     * Obtiene el cliente de Sucursal configurado para realizar llamadas a la API de Sucursal.
+     * @return SucursalClient configurado.
+     * @throws IllegalStateException si el cliente no está configurado.
+     */
     public SucursalClient getSucursalClient() {
         logger.info("Obteniendo cliente de Sucursal");
         if (sucursalClient == null) {
@@ -47,10 +69,20 @@ public class InventarioService {
         return sucursalClient;  
     }
 
+    /**
+     * Establece el cliente de Sucursal para realizar llamadas a la API de Sucursal.
+     * @param sucursalClient Cliente de Sucursal a establecer.
+     */
     public void setSucursalClient(SucursalClient sucursalClient) {
         this.sucursalClient = sucursalClient;
     }
 
+    /**
+     * Obtiene los detalles de una sucursal específica por su ID.
+     * @param sucursalId El ID de la sucursal para obtener sus detalles.
+     * @return SucursalDTO con los detalles de la sucursal.
+     * @throws IllegalArgumentException si el ID de sucursal es nulo.
+     */
     public SucursalDTO obtenerSucursalDetalle(Long sucursalId) {
         logger.info("Obteniendo detalles de la sucursal con ID: {}", sucursalId);
         if (sucursalId == null) {
@@ -76,6 +108,11 @@ public class InventarioService {
         return alertas;
     }
 
+    /**
+     * Obtiene una sucursal específica por su ID.
+     * @param id El ID de la sucursal a buscar.
+     * @return SucursalDTO con los detalles de la sucursal, o null si no se encuentra.
+     */
     public SucursalDTO obtenerSucursalPorId(Long id) {
         try {
             return getSucursalClient().obtenerSucursalPorId(id);
@@ -85,6 +122,10 @@ public class InventarioService {
         }
     }
 
+    /**
+     * Obtiene todas las sucursales disponibles.
+     * @return Una lista de SucursalDTO que representa todas las sucursales.
+     */
     public List<SucursalDTO> obtenerSucursales() {
         try {
             return getSucursalClient().obtenerTodasSucursales();

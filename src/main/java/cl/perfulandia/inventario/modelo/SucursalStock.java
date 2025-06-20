@@ -8,6 +8,11 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Data;
 
+/**
+ * SucursalStock.java
+ * Este modelo representa el stock de un producto en una sucursal específica.
+ * Contiene información sobre la sucursal, el producto y la cantidad de stock disponible.
+ */
 @Entity
 @Data
 public class SucursalStock {

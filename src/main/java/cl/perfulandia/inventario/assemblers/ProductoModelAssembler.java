@@ -7,8 +7,17 @@ import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
+/*
+ * ProductoModelAssembler.java
+ * Este ensamblador convierte objetos Producto en EntityModel con enlaces HATEOAS.
+ * Facilita la creación de respuestas enriquecidas con enlaces a las operaciones relacionadas.
+ */
 @Component
 public class ProductoModelAssembler implements RepresentationModelAssembler<Producto, EntityModel<Producto>> {
+    /*
+     * Convierte un objeto Producto en un EntityModel con enlaces HATEOAS.
+     * Este método agrega enlaces a las operaciones relacionadas con el producto.
+     */
     @Override
     public EntityModel<Producto> toModel(Producto producto) {
         return EntityModel.of(producto,
