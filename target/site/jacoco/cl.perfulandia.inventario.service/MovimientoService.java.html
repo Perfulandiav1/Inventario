@@ -2,6 +2,8 @@
 
 import java.time.LocalDateTime;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import cl.perfulandia.inventario.modelo.AlertaInventario;
@@ -13,93 +15,205 @@ import cl.perfulandia.inventario.repositorio.MovimientoRepositorio;
 import cl.perfulandia.inventario.repositorio.ProductoRepositorio;
 import cl.perfulandia.inventario.repositorio.SucursalStockRepositorio;
 
+/**
+ * MovimientoService.java
+ * Este servicio maneja las operaciones relacionadas con los movimientos de inventario.
+ * Permite registrar, listar, obtener y eliminar movimientos de inventario.
+ */
 @Service
-<span class="fc" id="L17">public class MovimientoService {</span>
+<span class="fc" id="L24">public class MovimientoService {</span>
+    /**
+     * Logger para registrar eventos en el servicio de movimientos.
+     * Utilizado para depuración y seguimiento de operaciones.
+     */
+<span class="fc" id="L29">    private static final Logger logger = LoggerFactory.getLogger(MovimientoService.class);</span>
+    /**
+     * Repositorio para acceder a los datos de movimientos de inventario.
+     * Proporciona métodos para buscar, guardar y eliminar movimientos.
+     */
     @Autowired
     private MovimientoRepositorio movimientoRepo;
+    /*
+     * Repositorio para acceder a los datos de stock de sucursales.
+     * Proporciona métodos para buscar y guardar el stock de productos en sucursales.
+     */
     @Autowired
     private SucursalStockRepositorio sucursalStockRepo;
+    /**
+     * Repositorio para acceder a los datos de productos.
+     * Proporciona métodos para buscar productos por ID.
+     */
     @Autowired
     private ProductoRepositorio productoRepo;
+    /**
+     * Repositorio para acceder a las alertas de inventario.
+     * Proporciona métodos para guardar y buscar alertas relacionadas con el stock de productos.
+     */
     @Autowired
     private AlertaRepositorio alertaRepo;
 
+    /**
+     * Constructor del servicio de movimientos.
+     * Inyecta los repositorios necesarios para realizar operaciones de acceso a datos.
+     */
     public Movimiento registrarMovimiento(Long sucursalId, Long productoId, Integer cantidad, String tipo) {
         // Validar tipo de movimiento
-<span class="fc bfc" id="L29" title="All 4 branches covered.">        if (!tipo.equalsIgnoreCase(&quot;ENTRADA&quot;) &amp;&amp; !tipo.equalsIgnoreCase(&quot;SALIDA&quot;)) {</span>
-<span class="fc" id="L30">            throw new IllegalArgumentException(&quot;Tipo de movimiento inválido. Debe ser ENTRADA o SALIDA.&quot;);</span>
+<span class="fc" id="L61">        logger.info(&quot;Registrando movimiento: Sucursal ID={}, Producto ID={}, Cantidad={}, Tipo={}&quot;, sucursalId, productoId, cantidad, tipo);</span>
+<span class="pc bpc" id="L62" title="4 of 8 branches missed.">        if (sucursalId == null || productoId == null || cantidad == null || tipo == null) {</span>
+<span class="nc" id="L63">            throw new IllegalArgumentException(&quot;Todos los parámetros deben ser proporcionados.&quot;);</span>
         }
-
+<span class="fc bfc" id="L65" title="All 4 branches covered.">        if (!tipo.equalsIgnoreCase(&quot;ENTRADA&quot;) &amp;&amp; !tipo.equalsIgnoreCase(&quot;SALIDA&quot;)) {</span>
+<span class="fc" id="L66">            throw new IllegalArgumentException(&quot;Tipo de movimiento inválido. Debe ser ENTRADA o SALIDA.&quot;);</span>
+        }
+<span class="pc bpc" id="L68" title="1 of 2 branches missed.">        if (cantidad &lt;= 0) {</span>
+<span class="nc" id="L69">            throw new IllegalArgumentException(&quot;La cantidad debe ser mayor que cero.&quot;);</span>
+        }
+<span class="fc" id="L71">        logger.info(&quot;Validación de parámetros completada. Procediendo con el registro del movimiento.&quot;);</span>
         // Buscar producto
-<span class="fc" id="L34">        Producto producto = productoRepo.findById(productoId)</span>
-<span class="fc" id="L35">            .orElseThrow(() -&gt; new RuntimeException(&quot;Producto no encontrado&quot;));</span>
+<span class="fc" id="L73">        logger.info(&quot;Buscando producto con ID: {}&quot;, productoId);</span>
+<span class="fc" id="L74">        Producto producto = productoRepo.findById(productoId)</span>
+<span class="fc" id="L75">            .orElseThrow(() -&gt; new RuntimeException(&quot;Producto no encontrado&quot;));</span>
 
         // Buscar o crear SucursalStock
-<span class="fc" id="L38">        SucursalStock stock = sucursalStockRepo.findAll().stream()</span>
-<span class="pc bpc" id="L39" title="2 of 4 branches missed.">            .filter(s -&gt; s.getSucursalId().equals(sucursalId) &amp;&amp; s.getProducto().getId().equals(productoId))</span>
-<span class="fc" id="L40">            .findFirst()</span>
-<span class="fc" id="L41">            .orElseGet(() -&gt; {</span>
-<span class="nc" id="L42">                SucursalStock nuevo = new SucursalStock();</span>
-<span class="nc" id="L43">                nuevo.setSucursalId(sucursalId);</span>
-<span class="nc" id="L44">                nuevo.setProducto(producto);</span>
-<span class="nc" id="L45">                nuevo.setStock(0);</span>
-<span class="nc" id="L46">                return nuevo;</span>
+<span class="fc" id="L78">        logger.info(&quot;Buscando stock para la sucursal con ID: {}&quot;, sucursalId);</span>
+<span class="fc" id="L79">        SucursalStock stock = sucursalStockRepo.findAll().stream()</span>
+<span class="pc bpc" id="L80" title="2 of 4 branches missed.">            .filter(s -&gt; s.getSucursalId().equals(sucursalId) &amp;&amp; s.getProducto().getId().equals(productoId))</span>
+<span class="fc" id="L81">            .findFirst()</span>
+<span class="fc" id="L82">            .orElseGet(() -&gt; {</span>
+<span class="nc" id="L83">                SucursalStock nuevo = new SucursalStock();</span>
+<span class="nc" id="L84">                nuevo.setSucursalId(sucursalId);</span>
+<span class="nc" id="L85">                nuevo.setProducto(producto);</span>
+<span class="nc" id="L86">                nuevo.setStock(0);</span>
+<span class="nc" id="L87">                return nuevo;</span>
             });
-
+<span class="fc" id="L89">        logger.info(&quot;Stock encontrado: {}&quot;, stock);</span>
         // Calcular nuevo stock
-<span class="fc bfc" id="L50" title="All 2 branches covered.">        int nuevoStock = stock.getStock() + (tipo.equalsIgnoreCase(&quot;ENTRADA&quot;) ? cantidad : -cantidad);</span>
-<span class="fc bfc" id="L51" title="All 2 branches covered.">        if (nuevoStock &lt; 0) {</span>
-<span class="fc" id="L52">            throw new IllegalStateException(&quot;Stock insuficiente para realizar la salida.&quot;);</span>
+<span class="fc" id="L91">        logger.info(&quot;Calculando nuevo stock para el producto: {}, Tipo: {}, Cantidad: {}&quot;, producto.getNombre(), tipo, cantidad);</span>
+         // Verificar si la cantidad es válida para salida
+<span class="fc bfc" id="L93" title="All 2 branches covered.">        int nuevoStock = stock.getStock() + (tipo.equalsIgnoreCase(&quot;ENTRADA&quot;) ? cantidad : -cantidad);</span>
+<span class="fc bfc" id="L94" title="All 2 branches covered.">        if (nuevoStock &lt; 0) {</span>
+<span class="fc" id="L95">            throw new IllegalStateException(&quot;Stock insuficiente para realizar la salida.&quot;);</span>
         }
-<span class="fc" id="L54">        stock.setStock(nuevoStock);</span>
-<span class="fc" id="L55">        sucursalStockRepo.save(stock);</span>
+<span class="fc" id="L97">        stock.setStock(nuevoStock);</span>
+<span class="fc" id="L98">        sucursalStockRepo.save(stock);</span>
 
         // Registrar el movimiento
-<span class="fc" id="L58">        Movimiento movimiento = new Movimiento();</span>
-<span class="fc" id="L59">        movimiento.setProducto(producto);</span>
-<span class="fc" id="L60">        movimiento.setSucursalId(sucursalId);</span>
-<span class="fc" id="L61">        movimiento.setCantidad(cantidad);</span>
-<span class="fc" id="L62">        movimiento.setTipo(tipo);</span>
-<span class="fc" id="L63">        movimiento.setFechaHora(LocalDateTime.now());</span>
-<span class="fc" id="L64">        movimientoRepo.save(movimiento);</span>
+<span class="fc" id="L101">        logger.info(&quot;Registrando movimiento de inventario: Producto={}, Sucursal ID={}, Cantidad={}, Tipo={}&quot;, producto.getNombre(), sucursalId, cantidad, tipo);</span>
+         // Crear y guardar el movimiento
+<span class="fc" id="L103">        Movimiento movimiento = new Movimiento();</span>
+<span class="fc" id="L104">        movimiento.setProducto(producto);</span>
+<span class="fc" id="L105">        movimiento.setSucursalId(sucursalId);</span>
+<span class="fc" id="L106">        movimiento.setCantidad(cantidad);</span>
+<span class="fc" id="L107">        movimiento.setTipo(tipo);</span>
+<span class="fc" id="L108">        movimiento.setFechaHora(LocalDateTime.now());</span>
+<span class="fc" id="L109">        movimientoRepo.save(movimiento);</span>
 
         // Verificar si el stock es bajo y crear alerta
-<span class="fc bfc" id="L67" title="All 2 branches covered.">        if (stock.getStock() &lt; 5) { // Aquí 5 es el umbral mínimo. Puedes parametrizarlo.</span>
-<span class="fc" id="L68">            AlertaInventario alerta = new AlertaInventario();</span>
-<span class="fc" id="L69">            alerta.setProductoId(producto.getId());</span>
-<span class="fc" id="L70">            alerta.setSucursalId(sucursalId);</span>
-<span class="fc" id="L71">            alerta.setStockActual(stock.getStock());</span>
-<span class="fc" id="L72">            alerta.setMensaje(&quot;Stock bajo para producto &quot; + producto.getNombre());</span>
-<span class="fc" id="L73">            alerta.setFechaHora(LocalDateTime.now());</span>
-<span class="fc" id="L74">            alertaRepo.save(alerta);</span>
+<span class="fc" id="L112">        logger.info(&quot;Verificando stock bajo para el producto: {}, Stock actual: {}&quot;, producto.getNombre(), stock.getStock());</span>
+         // Aquí puedes definir un umbral mínimo para generar alertas
+         // Por ejemplo, si el stock es menor a 5 unidades
+<span class="fc bfc" id="L115" title="All 2 branches covered.">        if (stock.getStock() &lt; 5) { // Aquí 5 es el umbral mínimo. Puedes parametrizarlo.</span>
+<span class="fc" id="L116">            AlertaInventario alerta = new AlertaInventario();</span>
+<span class="fc" id="L117">            alerta.setProductoId(producto.getId());</span>
+<span class="fc" id="L118">            alerta.setSucursalId(sucursalId);</span>
+<span class="fc" id="L119">            alerta.setStockActual(stock.getStock());</span>
+<span class="fc" id="L120">            alerta.setMensaje(&quot;Stock bajo para producto &quot; + producto.getNombre());</span>
+<span class="fc" id="L121">            alerta.setFechaHora(LocalDateTime.now());</span>
+<span class="fc" id="L122">            alertaRepo.save(alerta);</span>
         }
-
-<span class="fc" id="L77">        return movimiento;</span>
+<span class="fc" id="L124">        logger.info(&quot;Movimiento registrado correctamente: {}&quot;, movimiento);</span>
+         // Retornar el movimiento registrado
+<span class="fc" id="L126">        return movimiento;</span>
     }
 
-        
+    /**
+     * Listar todos los movimientos de inventario.
+     * @return Lista de movimientos de inventario.
+     */        
     public List&lt;Movimiento&gt; listarMovimientos() {
-<span class="fc" id="L82">        return movimientoRepo.findAll();</span>
-    }
-
-    public Movimiento obtenerMovimientoPorId(Long id) {
-<span class="fc" id="L86">        return movimientoRepo.findById(id)</span>
-<span class="fc" id="L87">            .orElseThrow(() -&gt; new RuntimeException(&quot;Movimiento no encontrado&quot;));</span>
-    }
-
-    public List&lt;Movimiento&gt; listarPorSucursal(Long sucursalId) {
-<span class="fc" id="L91">        return movimientoRepo.findBySucursalId(sucursalId);</span>
-    }
-
-    public List&lt;Movimiento&gt; listarPorProducto(Long productoId) {
-<span class="fc" id="L95">        return movimientoRepo.findByProductoId(productoId);</span>
-    }
-
-    public void eliminarMovimiento(Long id) {
-<span class="fc bfc" id="L99" title="All 2 branches covered.">        if (!movimientoRepo.existsById(id)) {</span>
-<span class="fc" id="L100">            throw new RuntimeException(&quot;Movimiento no encontrado para eliminar&quot;);</span>
+<span class="fc" id="L134">        logger.info(&quot;Listando todos los movimientos de inventario&quot;);</span>
+         // Obtener todos los movimientos
+<span class="fc" id="L136">        List&lt;Movimiento&gt; movimientos = movimientoRepo.findAll();</span>
+<span class="pc bpc" id="L137" title="1 of 2 branches missed.">        if (movimientos.isEmpty()) {</span>
+<span class="nc" id="L138">            logger.warn(&quot;No se encontraron movimientos de inventario&quot;);</span>
+<span class="nc" id="L139">            return List.of();</span>
         }
-<span class="fc" id="L102">        movimientoRepo.deleteById(id);</span>
-<span class="fc" id="L103">    }</span>
+<span class="fc" id="L141">        return movimientos;</span>
+    }
+
+    /**
+     * Obtener un movimiento específico por su ID.
+     * @param id ID del movimiento a obtener.
+     * @return Movimiento encontrado.
+     * @throws IllegalArgumentException si el ID es nulo.
+     * @throws RuntimeException si el movimiento no se encuentra.
+     */
+    public Movimiento obtenerMovimientoPorId(Long id) {
+<span class="fc" id="L152">        logger.info(&quot;Obteniendo movimiento con ID: {}&quot;, id);</span>
+<span class="pc bpc" id="L153" title="1 of 2 branches missed.">        if (id == null) {</span>
+<span class="nc" id="L154">            logger.error(&quot;ID de movimiento no proporcionado&quot;);</span>
+<span class="nc" id="L155">            throw new IllegalArgumentException(&quot;El ID de movimiento no puede ser nulo&quot;);</span>
+        }
+         // Buscar el movimiento por ID
+<span class="fc" id="L158">        logger.info(&quot;Buscando movimiento en la base de datos&quot;);</span>
+<span class="fc bfc" id="L159" title="All 2 branches covered.">        if (!movimientoRepo.existsById(id)) {</span>
+<span class="fc" id="L160">            logger.error(&quot;Movimiento no encontrado con ID: {}&quot;, id);</span>
+<span class="fc" id="L161">            throw new RuntimeException(&quot;Movimiento no encontrado&quot;);</span>
+        }
+         // Retornar el movimiento encontrado
+<span class="fc" id="L164">        return movimientoRepo.findById(id)</span>
+<span class="pc" id="L165">            .orElseThrow(() -&gt; new RuntimeException(&quot;Movimiento no encontrado&quot;));</span>
+    }
+
+    /**
+     * Listar movimientos por ID de sucursal.
+     * @param sucursalId ID de la sucursal para filtrar los movimientos.
+     * @return Lista de movimientos asociados a la sucursal.
+     * @throws IllegalArgumentException si el ID de sucursal es nulo.
+     */
+    public List&lt;Movimiento&gt; listarPorSucursal(Long sucursalId) {
+<span class="fc" id="L175">        logger.info(&quot;Listando movimientos para la sucursal con ID: {}&quot;, sucursalId);</span>
+<span class="pc bpc" id="L176" title="1 of 2 branches missed.">        if (sucursalId == null) {</span>
+<span class="nc" id="L177">            logger.error(&quot;ID de sucursal no proporcionado&quot;);</span>
+<span class="nc" id="L178">            throw new IllegalArgumentException(&quot;El ID de sucursal no puede ser nulo&quot;);</span>
+        }
+         // Buscar movimientos por ID de sucursal
+<span class="fc" id="L181">        return movimientoRepo.findBySucursalId(sucursalId);</span>
+    }
+
+    /**
+     * Listar movimientos por ID de producto.
+     * @param productoId ID del producto para filtrar los movimientos.
+     * @return Lista de movimientos asociados al producto.
+     * @throws IllegalArgumentException si el ID de producto es nulo.
+     */
+    public List&lt;Movimiento&gt; listarPorProducto(Long productoId) {
+<span class="fc" id="L191">        logger.info(&quot;Listando movimientos para el producto con ID: {}&quot;, productoId);</span>
+<span class="pc bpc" id="L192" title="1 of 2 branches missed.">        if (productoId == null) {</span>
+<span class="nc" id="L193">            logger.error(&quot;ID de producto no proporcionado&quot;);</span>
+<span class="nc" id="L194">            throw new IllegalArgumentException(&quot;El ID de producto no puede ser nulo&quot;);</span>
+        }
+<span class="fc" id="L196">        return movimientoRepo.findByProductoId(productoId);</span>
+    }
+
+    /**
+     * Eliminar un movimiento por su ID.
+     * @param id ID del movimiento a eliminar.
+     * @throws IllegalArgumentException si el ID es nulo.
+     * @throws RuntimeException si el movimiento no se encuentra.
+     */
+    public void eliminarMovimiento(Long id) {
+<span class="fc" id="L206">        logger.info(&quot;Eliminando movimiento con ID: {}&quot;, id);</span>
+<span class="pc bpc" id="L207" title="1 of 2 branches missed.">        if (id == null) {</span>
+<span class="nc" id="L208">            logger.error(&quot;ID de movimiento no proporcionado&quot;);</span>
+<span class="nc" id="L209">            throw new IllegalArgumentException(&quot;El ID de movimiento no puede ser nulo&quot;);</span>
+        }
+         // Verificar si el movimiento existe antes de eliminar
+<span class="fc bfc" id="L212" title="All 2 branches covered.">        if (!movimientoRepo.existsById(id)) {</span>
+<span class="fc" id="L213">            logger.error(&quot;Movimiento no encontrado con ID: {}&quot;, id);</span>
+<span class="fc" id="L214">            throw new RuntimeException(&quot;Movimiento no encontrado para eliminar&quot;);</span>
+        }
+<span class="fc" id="L216">        movimientoRepo.deleteById(id);</span>
+<span class="fc" id="L217">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

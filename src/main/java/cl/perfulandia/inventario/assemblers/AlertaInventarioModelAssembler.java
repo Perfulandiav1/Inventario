@@ -4,6 +4,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
 import cl.perfulandia.inventario.controlador.AlertaController;
+import cl.perfulandia.inventario.controlador.InventarioControlador;
 import cl.perfulandia.inventario.modelo.AlertaInventario;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 /*
@@ -23,8 +24,9 @@ public class AlertaInventarioModelAssembler implements RepresentationModelAssemb
             linkTo(methodOn(AlertaController.class).listarPorSucursalYProducto(
                 alertaInventario.getSucursalId(),
                 alertaInventario.getProductoId())).withRel("Alertas por sucursal y producto"),
-            linkTo(methodOn(AlertaController.class).listarPorProducto(alertaInventario.getProductoId())).withRel("Alertas por producto")
-        );
+            linkTo(methodOn(AlertaController.class).listarPorProducto(alertaInventario.getProductoId())).withRel("Alertas por producto"),
+            linkTo(methodOn(InventarioControlador.class).obtenerSucursal(alertaInventario.getSucursalId())).withRel("sucursal")
+);
     }
 
 }

@@ -13,6 +13,11 @@ import java.util.List;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import cl.perfulandia.inventario.assemblers.AlertaInventarioModelAssembler;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.http.MediaType;
+
 
 @WebMvcTest(AlertaController.class)
 class AlertaControllerTest {
@@ -22,6 +27,9 @@ class AlertaControllerTest {
 
     @MockBean
     private AlertaInventarioService alertaService;
+
+    @MockBean
+    private AlertaInventarioModelAssembler alertaModelAssembler;
 
     private AlertaInventario alerta;
 
@@ -34,19 +42,12 @@ class AlertaControllerTest {
     @Test
     void listarTodas_debeRetornarLista() throws Exception {
         when(alertaService.obtenerTodasAlertas()).thenReturn(List.of(alerta));
+        when(alertaModelAssembler.toModel(any(AlertaInventario.class)))
+                .thenReturn(EntityModel.of(alerta));
 
         mockMvc.perform(get("/api/alertas/listar"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(alerta.getId()));
-    }
-
-    @Test
-    void listarPorSucursal_debeRetornarLista() throws Exception {
-        when(alertaService.obtenerAlertasPorSucursal(1L)).thenReturn(List.of(alerta));
-
-        mockMvc.perform(get("/api/alertas/obtener/sucursal/1"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(alerta.getId()));
+                .andExpect(jsonPath("_embedded.alertaInventarioList[0].id").value(alerta.getId()));
     }
 
     @Test
@@ -65,5 +66,33 @@ class AlertaControllerTest {
         mockMvc.perform(get("/api/alertas/obtener/sucursal/1/producto/2"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(alerta.getId()));
+    }
+
+    @Test
+    void listarTodas_debeRetornarListaVacia() throws Exception {
+        when(alertaService.obtenerTodasAlertas()).thenReturn(List.of());
+        when(alertaModelAssembler.toModel(any())).thenReturn(null);
+
+        mockMvc.perform(get("/api/alertas/listar"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("_embedded.alertaInventarioList").doesNotExist());
+    }
+
+    @Test
+    void listarPorProducto_sinResultados() throws Exception {
+        when(alertaService.obtenerAlertasPorProducto(99L)).thenReturn(List.of());
+
+        mockMvc.perform(get("/api/alertas/obtener/producto/99"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("[]"));
+    }
+
+    @Test
+    void listarPorSucursalYProducto_sinResultados() throws Exception {
+        when(alertaService.obtenerAlertasPorSucursalYProducto(99L, 88L)).thenReturn(List.of());
+
+        mockMvc.perform(get("/api/alertas/obtener/sucursal/99/producto/88"))
+                .andExpect(status().isOk())
+                .andExpect(content().json("[]"));
     }
 }

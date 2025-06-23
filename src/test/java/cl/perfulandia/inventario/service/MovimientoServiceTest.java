@@ -152,6 +152,7 @@ class MovimientoServiceTest {
     void obtenerMovimientoPorId_existente() {
         Movimiento mov = new Movimiento();
         mov.setId(1L);
+        when(movimientoRepo.existsById(1L)).thenReturn(true); // <-- Agrega esto
         when(movimientoRepo.findById(1L)).thenReturn(Optional.of(mov));
 
         Movimiento resultado = movimientoService.obtenerMovimientoPorId(1L);

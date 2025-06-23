@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ProductoController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">inventario</a> &gt; <a href="index.source.html" class="el_package">cl.perfulandia.inventario.controlador</a> &gt; <span class="el_source">ProductoController.java</span></div><h1>ProductoController.java</h1><pre class="source lang-java linenums">package cl.perfulandia.inventario.controlador;
 
 import java.util.List;
-
+import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,42 +15,188 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import cl.perfulandia.inventario.assemblers.ProductoModelAssembler;
 import cl.perfulandia.inventario.modelo.Producto;
 import cl.perfulandia.inventario.service.ProductoService;
-import lombok.RequiredArgsConstructor;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
+/**
+ * Controlador para manejar las operaciones relacionadas con los productos.
+ * Proporciona endpoints para listar, obtener, crear, actualizar y eliminar productos.
+ */
 @RestController
 @RequestMapping(&quot;/api/productos&quot;)
-@RequiredArgsConstructor
+@Tag(name = &quot;Producto&quot;, description = &quot;Operaciones relacionadas con los productos&quot;)
 public class ProductoController {
 
+    /**
+     * Logger para registrar eventos en el controlador de productos.
+     * Utilizado para depuración y seguimiento de operaciones.
+     */
+<span class="fc" id="L42">    private static final Logger logger = LoggerFactory.getLogger(ProductoController.class);</span>
+    /**
+     * Servicio para manejar la lógica de negocio relacionada con los productos.
+     * Proporciona métodos para listar, obtener, crear, actualizar y eliminar productos.
+     */
     private final ProductoService productoService;
+    private final ProductoModelAssembler productoModelAssembler;
 
+    /**
+     * Constructor del controlador de productos.
+     * Inyecta el servicio de productos y el ensamblador de modelos para convertir entidades en modelos HATEOAS.
+     *
+     * @param productoService Servicio para manejar la lógica de negocio relacionada con los productos.
+     * @param productoModelAssembler Ensamblador para convertir objetos Producto en EntityModel con enlaces HATEOAS.
+     */
+<span class="fc" id="L57">    public ProductoController(ProductoService productoService, ProductoModelAssembler productoModelAssembler) {</span>
+<span class="fc" id="L58">        this.productoService = productoService;</span>
+<span class="fc" id="L59">        this.productoModelAssembler = productoModelAssembler;</span>
+<span class="fc" id="L60">    }</span>
+
+    /**
+     * Endpoint para listar todos los productos registrados.
+     * Devuelve una colección de productos con enlaces HATEOAS.
+     *
+     * @return Colección de productos con enlaces HATEOAS.
+     */
+    @Operation(summary = &quot;Listar productos&quot;, description = &quot;Obtiene una lista de todos los productos registrados.&quot;)
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Lista de productos obtenida correctamente&quot;, content = @Content(mediaType = &quot;application/json&quot;, schema = @Schema(implementation = Producto.class)))
+    })
+    /*
+     * Endpoint para listar todos los productos registrados.
+     * Retorna una colección de modelos de producto con enlaces HATEOAS.
+     */
     @GetMapping(&quot;/listar&quot;)
-    public ResponseEntity&lt;List&lt;Producto&gt;&gt; listarProductos() {
-<span class="fc" id="L28">        return ResponseEntity.ok(productoService.listarProductos());</span>
+    public CollectionModel&lt;EntityModel&lt;Producto&gt;&gt; listarProductos() {
+<span class="fc" id="L78">        logger.info(&quot;Listando todos los productos&quot;);</span>
+<span class="fc" id="L79">        List&lt;EntityModel&lt;Producto&gt;&gt; productos = productoService.listarProductos().stream()</span>
+<span class="fc" id="L80">            .map(productoModelAssembler::toModel)</span>
+<span class="fc" id="L81">            .collect(Collectors.toList());</span>
+<span class="pc bpc" id="L82" title="1 of 2 branches missed.">        if (productos.isEmpty()) {</span>
+<span class="nc" id="L83">            logger.warn(&quot;No se encontraron productos&quot;);</span>
+<span class="nc" id="L84">            return CollectionModel.empty();</span>
+        }
+<span class="fc" id="L86">        logger.info(&quot;Total de productos encontrados: {}&quot;, productos.size());</span>
+<span class="fc" id="L87">        return CollectionModel.of(productos).add(linkTo(methodOn(ProductoController.class).listarProductos()).withSelfRel());</span>
     }
-
+    /*
+     * Endpoint para obtener un producto específico por su ID.
+     * Retorna un modelo de producto con enlaces HATEOAS.
+     */
+    @Operation(summary = &quot;Obtener producto por ID&quot;, description = &quot;Obtiene un producto específico por su ID.&quot;)
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Producto obtenido correctamente&quot;, content = @Content(mediaType = &quot;application/json&quot;, schema = @Schema(implementation = Producto.class))),
+        @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Producto no encontrado&quot;)
+    })
+    /*
+     * Endpoint para obtener un producto específico por su ID.
+     * @param id ID del producto a obtener.
+     */
     @GetMapping(&quot;/obtener/{id}&quot;)
-    public ResponseEntity&lt;Producto&gt; obtenerProductoPorId(@PathVariable Long id) {
-<span class="fc" id="L33">        return ResponseEntity.ok(productoService.obtenerProductoPorId(id));</span>
+    public EntityModel&lt;Producto&gt; obtenerProductoPorId(@PathVariable Long id) {
+<span class="fc" id="L104">        logger.info(&quot;Obteniendo producto con ID: {}&quot;, id);</span>
+<span class="pc bpc" id="L105" title="1 of 2 branches missed.">        if (id == null) {</span>
+<span class="nc" id="L106">            logger.error(&quot;ID de producto no proporcionado&quot;);</span>
+<span class="nc" id="L107">            throw new IllegalArgumentException(&quot;El ID de producto no puede ser nulo&quot;);</span>
+        }
+<span class="fc" id="L109">        Producto producto = productoService.obtenerProductoPorId(id);</span>
+<span class="pc bpc" id="L110" title="1 of 2 branches missed.">        if (producto == null) {</span>
+<span class="nc" id="L111">            logger.error(&quot;Producto no encontrado con ID: {}&quot;, id);</span>
+<span class="nc" id="L112">            throw new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.NOT_FOUND, &quot;Producto no encontrado&quot;);</span>
+        }
+<span class="fc" id="L114">        return EntityModel.of(producto)</span>
+<span class="fc" id="L115">            .add(linkTo(methodOn(ProductoController.class).listarProductos()).withRel(&quot;productos&quot;))</span>
+<span class="fc" id="L116">            .add(linkTo(methodOn(ProductoController.class).obtenerProductoPorId(id)).withSelfRel());</span>
     }
-
-    @PostMapping(&quot;/agregar&quot;)
-    public ResponseEntity&lt;Producto&gt; crearProducto(@RequestBody Producto producto) {
-<span class="fc" id="L38">        return ResponseEntity.ok(productoService.crearProducto(producto));</span>
+    /*
+     * Endpoint para crear un nuevo producto.
+     * Retorna el producto creado con enlaces HATEOAS.
+     */
+    @Operation(summary = &quot;Crear producto&quot;, description = &quot;Crea un nuevo producto en el sistema.&quot;)
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Producto creado correctamente&quot;, content = @Content(mediaType = &quot;application/json&quot;, schema = @Schema(implementation = Producto.class))),
+        @ApiResponse(responseCode = &quot;400&quot;, description = &quot;Solicitud inválida&quot;)
+    })
+    /*
+     * Endpoint para crear un nuevo producto.
+     * @param producto Objeto Producto con los datos del nuevo producto a crear.
+     */
+    @PostMapping(&quot;/crear&quot;)
+    public ResponseEntity&lt;EntityModel&lt;Producto&gt;&gt; crearProducto(@RequestBody Producto producto) {
+<span class="fc" id="L133">        logger.info(&quot;Creando nuevo producto: {}&quot;, producto);</span>
+<span class="pc bpc" id="L134" title="3 of 6 branches missed.">        if (producto == null || producto.getNombre() == null || producto.getPrecio() &lt;= 0) {</span>
+<span class="nc" id="L135">            logger.error(&quot;Datos de producto inválidos: {}&quot;, producto);</span>
+<span class="nc" id="L136">            throw new IllegalArgumentException(&quot;El nombre y el precio del producto son obligatorios y deben ser válidos&quot;);</span>
+        }
+<span class="fc" id="L138">        Producto nuevoProducto = productoService.crearProducto(producto);</span>
+<span class="fc" id="L139">        logger.info(&quot;Producto creado correctamente: {}&quot;, nuevoProducto);</span>
+        // Crear el recurso de producto con HATEOAS
+<span class="fc" id="L141">        EntityModel&lt;Producto&gt; productoResource = productoModelAssembler.toModel(nuevoProducto);</span>
+<span class="fc" id="L142">        return productoResource.getLink(&quot;self&quot;)</span>
+<span class="fc" id="L143">        .map(link -&gt; ResponseEntity.created(link.toUri()).body(productoResource))</span>
+<span class="pc" id="L144">        .orElseGet(() -&gt; ResponseEntity.ok(productoResource));</span>
     }
-
+    /*
+     * Endpoint para actualizar un producto existente.
+     * Retorna el producto actualizado con enlaces HATEOAS.
+     */
+    @Operation(summary = &quot;Actualizar producto&quot;, description = &quot;Actualiza un producto existente en el sistema.&quot;)
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = &quot;200&quot;, description = &quot;Producto actualizado correctamente&quot;, content = @Content(mediaType = &quot;application/json&quot;, schema = @Schema(implementation = Producto.class))),
+        @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Producto no encontrado&quot;)
+    })
+    /**
+     * Endpoint para actualizar un producto existente.
+     * @param id ID del producto a actualizar.
+     * @param producto Objeto Producto con los datos actualizados.
+     */	
     @PutMapping(&quot;/actualizar/{id}&quot;)
-    public ResponseEntity&lt;Producto&gt; actualizarProducto(@PathVariable Long id, @RequestBody Producto producto) {
-<span class="fc" id="L43">        return ResponseEntity.ok(productoService.actualizarProducto(id, producto));</span>
+    public ResponseEntity&lt;EntityModel&lt;Producto&gt;&gt; actualizarProducto(@PathVariable Long id, @RequestBody Producto producto) {
+<span class="fc" id="L162">        logger.info(&quot;Actualizando producto con ID: {}&quot;, id);</span>
+<span class="pc bpc" id="L163" title="2 of 4 branches missed.">        if (id == null || producto == null) {</span>
+<span class="nc" id="L164">            logger.error(&quot;ID de producto o datos de actualización no proporcionados&quot;);</span>
+<span class="nc" id="L165">            throw new IllegalArgumentException(&quot;El ID de producto y los datos de actualización son obligatorios&quot;);</span>
+        }
+<span class="fc" id="L167">        Producto productoActualizado = productoService.actualizarProducto(id, producto);</span>
+<span class="fc" id="L168">        logger.info(&quot;Producto actualizado correctamente: {}&quot;, productoActualizado);</span>
+<span class="fc" id="L169">        EntityModel&lt;Producto&gt; productoResource = productoModelAssembler.toModel(productoActualizado);</span>
+<span class="fc" id="L170">        return ResponseEntity.ok(productoResource);</span>
     }
-
+    /*
+     * Endpoint para eliminar un producto por su ID.
+     * Retorna una respuesta vacía con código 204 si se elimina correctamente.
+     */
+    @Operation(summary = &quot;Eliminar producto&quot;, description = &quot;Elimina un producto del sistema por su ID.&quot;)
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = &quot;204&quot;, description = &quot;Producto eliminado correctamente&quot;),
+        @ApiResponse(responseCode = &quot;404&quot;, description = &quot;Producto no encontrado&quot;)
+    })
+    /**
+     * Endpoint para eliminar un producto por su ID.
+     * @param id ID del producto a eliminar.
+     * @return ResponseEntity con código 204 si se elimina correctamente, o 404 si no se encuentra el producto.
+     */
     @DeleteMapping(&quot;/eliminar/{id}&quot;)
-    public ResponseEntity&lt;Void&gt; eliminarProducto(@PathVariable Long id) {
-<span class="fc" id="L48">        productoService.eliminarProducto(id);</span>
-<span class="fc" id="L49">        return ResponseEntity.noContent().build();</span>
+    public ResponseEntity&lt;?&gt; eliminarProducto(@PathVariable Long id) {
+<span class="fc" id="L188">        logger.info(&quot;Eliminando producto con ID: {}&quot;, id);</span>
+<span class="pc bpc" id="L189" title="1 of 2 branches missed.">        if (id == null) {</span>
+<span class="nc" id="L190">            logger.error(&quot;ID de producto no proporcionado&quot;);</span>
+<span class="nc" id="L191">            return ResponseEntity.badRequest().build();</span>
+        }
+<span class="fc" id="L193">        Producto producto = productoService.obtenerProductoPorId(id);</span>
+<span class="pc bpc" id="L194" title="1 of 2 branches missed.">        if (producto == null) {</span>
+<span class="nc" id="L195">            logger.error(&quot;Producto no encontrado con ID: {}&quot;, id);</span>
+<span class="nc" id="L196">            return ResponseEntity.notFound().build();</span>
+        }
+<span class="fc" id="L198">        productoService.eliminarProducto(id);</span>
+<span class="fc" id="L199">        return ResponseEntity.noContent().build();</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

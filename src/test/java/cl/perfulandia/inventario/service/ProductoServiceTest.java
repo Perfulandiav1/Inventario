@@ -23,17 +23,7 @@ class ProductoServiceTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    @Test
-    void listarProductos_debeRetornarLista() {
-        Producto producto = new Producto();
-        producto.setId(1L);
-        when(productoRepository.findAll()).thenReturn(List.of(producto));
-
-        List<Producto> resultado = productoService.listarProductos();
-
-        assertEquals(1, resultado.size());
-        assertEquals(1L, resultado.get(0).getId());
-    }
+    
 
     @Test
     void obtenerProductoPorId_existente() {
@@ -58,6 +48,9 @@ class ProductoServiceTest {
     void crearProducto_debeGuardarYRetornarProducto() {
         Producto producto = new Producto();
         producto.setId(1L);
+        producto.setNombre("Producto Test"); // <-- Agrega esto
+        producto.setPrecio(100.0);           // <-- Y esto
+
         when(productoRepository.save(producto)).thenReturn(producto);
 
         Producto resultado = productoService.crearProducto(producto);
@@ -106,5 +99,18 @@ class ProductoServiceTest {
         productoService.eliminarProducto(1L);
 
         verify(productoRepository, times(1)).deleteById(1L);
+    }
+
+    @Test
+    void listarProductos_debeRetornarLista() {
+        Producto producto = new Producto();
+        producto.setId(1L);
+        when(productoRepository.count()).thenReturn(1L); // <-- Agrega esto
+        when(productoRepository.findAll()).thenReturn(List.of(producto));
+
+        List<Producto> resultado = productoService.listarProductos();
+
+        assertEquals(1, resultado.size());
+        assertEquals(1L, resultado.get(0).getId());
     }
 }

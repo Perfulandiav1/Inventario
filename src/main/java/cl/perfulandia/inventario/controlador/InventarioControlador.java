@@ -48,6 +48,7 @@ public class InventarioControlador {
     @Autowired
     public final InventarioService inventarioService;
     private final AlertaInventarioModelAssembler alertaInventarioModelAssembler;
+    private final SucursalStockModelAssembler sucursalStockModelAssembler;
 
     /*
      * Ensamblador para convertir objetos AlertaInventario en EntityModel con enlaces HATEOAS.
@@ -56,6 +57,7 @@ public class InventarioControlador {
     public InventarioControlador(InventarioService inventarioService, SucursalStockModelAssembler sucursalStockModelAssembler) {
         this.inventarioService = inventarioService;
         this.alertaInventarioModelAssembler = new AlertaInventarioModelAssembler();
+        this.sucursalStockModelAssembler = sucursalStockModelAssembler;
     }
 
     /*
@@ -75,20 +77,17 @@ public class InventarioControlador {
      * Devuelve una lista de SucursalStock con enlaces HATEOAS.
      */
     @GetMapping("/stock/{sucursalId}")
-    public EntityModel<List<SucursalStock>> obtenerStock(@PathVariable Long sucursalId) {
+    public CollectionModel<EntityModel<SucursalStock>> obtenerStock(@PathVariable Long sucursalId) {
         logger.info("Obteniendo stock para la sucursal con ID: {}", sucursalId);
         if (sucursalId == null) {
             logger.error("ID de sucursal no proporcionado");
             throw new IllegalArgumentException("El ID de sucursal no puede ser nulo");
         }
         List<SucursalStock> stock = inventarioService.obtenerStockPorSucursal(sucursalId);
-        if (stock == null) {
-            logger.warn("No se encontró stock para la sucursal con ID: {}", sucursalId);
-            return EntityModel.of(Collections.<SucursalStock>emptyList())
-                    .add(linkTo(methodOn(InventarioControlador.class).obtenerStock(sucursalId)).withSelfRel());
-        }
-        logger.info("Stock obtenido correctamente para la sucursal con ID: {}", sucursalId);
-        return EntityModel.of(stock)
+        List<EntityModel<SucursalStock>> stockModels = stock.stream()
+            .map(sucursalStockModelAssembler::toModel)
+            .collect(Collectors.toList());
+        return CollectionModel.of(stockModels)
                 .add(linkTo(methodOn(InventarioControlador.class).obtenerStock(sucursalId)).withSelfRel());
     }
     /*

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="es"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>InventarioService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">inventario</a> &gt; <a href="index.source.html" class="el_package">cl.perfulandia.inventario.service</a> &gt; <span class="el_source">InventarioService.java</span></div><h1>InventarioService.java</h1><pre class="source lang-java linenums">package cl.perfulandia.inventario.service;
 import java.util.Collections;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import cl.perfulandia.inventario.dto.SucursalDTO;
@@ -11,55 +13,125 @@ import cl.perfulandia.inventario.repositorio.AlertaRepositorio;
 import cl.perfulandia.inventario.repositorio.SucursalStockRepositorio;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * InventarioService.java
+ * Este servicio maneja las operaciones relacionadas con el inventario.
+ * Permite obtener stock por sucursal, listar alertas de inventario y obtener detalles de sucursales.
+ */
 @Service
 @RequiredArgsConstructor
 public class InventarioService {
+    /**
+     * Logger para registrar eventos en el servicio de inventario.
+     * Utilizado para depuración y seguimiento de operaciones.
+     */
+<span class="fc" id="L28">    private static final Logger logger = LoggerFactory.getLogger(InventarioService.class);</span>
+    /**
+     * Repositorio para acceder a los datos de stock de sucursales.
+     * Proporciona métodos para buscar stocks por ID de sucursal.
+     */
     @Autowired
     private SucursalClient sucursalClient;
     private final SucursalStockRepositorio sucursalStockRepo;
     private final AlertaRepositorio alertaRepo;
 
+    /**
+     * Constructor del servicio de inventario.
+     * Inyecta el repositorio de stock de sucursales y el repositorio de alertas para realizar operaciones de acceso a datos.
+     */
     public List&lt;SucursalStock&gt; obtenerStockPorSucursal(Long sucursalId) {
-<span class="fc" id="L23">        return sucursalStockRepo.findBySucursalId(sucursalId);</span>
+<span class="fc" id="L43">        logger.info(&quot;Obteniendo stock para la sucursal con ID: {}&quot;, sucursalId);</span>
+<span class="pc bpc" id="L44" title="1 of 2 branches missed.">        if (sucursalId == null) {</span>
+<span class="nc" id="L45">            logger.error(&quot;ID de sucursal no proporcionado&quot;);</span>
+<span class="nc" id="L46">            throw new IllegalArgumentException(&quot;El ID de sucursal no puede ser nulo&quot;);</span>
+        }
+<span class="fc" id="L48">        List&lt;SucursalStock&gt; stock = sucursalStockRepo.findBySucursalId(sucursalId);</span>
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">        if (stock.isEmpty()) {</span>
+<span class="nc" id="L50">            logger.warn(&quot;No se encontró stock para la sucursal con ID: {}&quot;, sucursalId);</span>
+<span class="nc" id="L51">            return Collections.emptyList();</span>
+        }
+<span class="fc" id="L53">        return stock;</span>
     }
 
+    /**
+     * Obtiene el cliente de Sucursal configurado para realizar llamadas a la API de Sucursal.
+     * @return SucursalClient configurado.
+     * @throws IllegalStateException si el cliente no está configurado.
+     */
     public SucursalClient getSucursalClient() {
-<span class="fc" id="L27">        return sucursalClient;</span>
-        
+<span class="fc" id="L62">        logger.info(&quot;Obteniendo cliente de Sucursal&quot;);</span>
+<span class="pc bpc" id="L63" title="1 of 2 branches missed.">        if (sucursalClient == null) {</span>
+<span class="nc" id="L64">            logger.error(&quot;SucursalClient no está configurado&quot;);</span>
+<span class="nc" id="L65">            throw new IllegalStateException(&quot;SucursalClient no está configurado&quot;);</span>
+        }
+<span class="fc" id="L67">        logger.info(&quot;SucursalClient obtenido correctamente&quot;);</span>
+        // Aquí podrías agregar más lógica si es necesario
+<span class="fc" id="L69">        return sucursalClient;  </span>
     }
 
+    /**
+     * Establece el cliente de Sucursal para realizar llamadas a la API de Sucursal.
+     * @param sucursalClient Cliente de Sucursal a establecer.
+     */
     public void setSucursalClient(SucursalClient sucursalClient) {
-<span class="fc" id="L32">        this.sucursalClient = sucursalClient;</span>
-        
-<span class="fc" id="L34">    }</span>
+<span class="fc" id="L77">        this.sucursalClient = sucursalClient;</span>
+<span class="fc" id="L78">    }</span>
 
+    /**
+     * Obtiene los detalles de una sucursal específica por su ID.
+     * @param sucursalId El ID de la sucursal para obtener sus detalles.
+     * @return SucursalDTO con los detalles de la sucursal.
+     * @throws IllegalArgumentException si el ID de sucursal es nulo.
+     */
     public SucursalDTO obtenerSucursalDetalle(Long sucursalId) {
-<span class="fc" id="L37">        return getSucursalClient().obtenerSucursalPorId(sucursalId);</span>
+<span class="fc" id="L87">        logger.info(&quot;Obteniendo detalles de la sucursal con ID: {}&quot;, sucursalId);</span>
+<span class="pc bpc" id="L88" title="1 of 2 branches missed.">        if (sucursalId == null) {</span>
+<span class="nc" id="L89">            logger.error(&quot;ID de sucursal no proporcionado&quot;);</span>
+<span class="nc" id="L90">            throw new IllegalArgumentException(&quot;El ID de sucursal no puede ser nulo&quot;);</span>
+        }
+<span class="fc" id="L92">        logger.info(&quot;Llamando al cliente de Sucursal para obtener detalles&quot;);</span>
+        // Aquí se asume que el cliente de Sucursal está configurado y disponible
+<span class="fc" id="L94">        return getSucursalClient().obtenerSucursalPorId(sucursalId);</span>
     }
 
     /**
      * Listar todas las alertas.
      */
     public List&lt;AlertaInventario&gt; listarAlertas() {
-<span class="fc" id="L44">        return alertaRepo.findAll();</span>
+<span class="fc" id="L101">        logger.info(&quot;Listando todas las alertas de inventario&quot;);</span>
+<span class="fc" id="L102">        List&lt;AlertaInventario&gt; alertas = alertaRepo.findAll();</span>
+<span class="pc bpc" id="L103" title="1 of 2 branches missed.">        if (alertas.isEmpty()) {</span>
+<span class="nc" id="L104">            logger.warn(&quot;No se encontraron alertas de inventario&quot;);</span>
+<span class="nc" id="L105">            return List.of();</span>
+        }
+<span class="fc" id="L107">        logger.info(&quot;Total de alertas encontradas: {}&quot;, alertas.size());</span>
+<span class="fc" id="L108">        return alertas;</span>
     }
 
+    /**
+     * Obtiene una sucursal específica por su ID.
+     * @param id El ID de la sucursal a buscar.
+     * @return SucursalDTO con los detalles de la sucursal, o null si no se encuentra.
+     */
     public SucursalDTO obtenerSucursalPorId(Long id) {
         try {
-<span class="fc" id="L49">            return getSucursalClient().obtenerSucursalPorId(id);</span>
-<span class="fc" id="L50">        } catch (Exception e) {</span>
-<span class="fc" id="L51">            System.err.println(&quot;Error al llamar a Sucursal: &quot; + e.getMessage());</span>
-<span class="fc" id="L52">            return null; // o lanza excepción personalizada</span>
+<span class="fc" id="L118">            return getSucursalClient().obtenerSucursalPorId(id);</span>
+<span class="fc" id="L119">        } catch (Exception e) {</span>
+<span class="fc" id="L120">            logger.error(&quot;Error al llamar a Sucursal: {}&quot;, e.getMessage());</span>
+<span class="fc" id="L121">            return null; // o lanza excepción personalizada</span>
         }
     }
 
+    /**
+     * Obtiene todas las sucursales disponibles.
+     * @return Una lista de SucursalDTO que representa todas las sucursales.
+     */
     public List&lt;SucursalDTO&gt; obtenerSucursales() {
         try {
-<span class="fc" id="L58">            return getSucursalClient().obtenerTodasSucursales();</span>
-<span class="fc" id="L59">        } catch (Exception e) {</span>
-            // Loguea o maneja el error según convenga
-<span class="fc" id="L61">            System.err.println(&quot;Error al llamar a Sucursal: &quot; + e.getMessage());</span>
-<span class="fc" id="L62">            return Collections.emptyList(); // o lanza excepción personalizada</span>
+<span class="fc" id="L131">            return getSucursalClient().obtenerTodasSucursales();</span>
+<span class="fc" id="L132">        } catch (Exception e) {</span>
+<span class="fc" id="L133">            logger.error(&quot;Error al llamar a Sucursal: {}&quot;, e.getMessage());</span>
+<span class="fc" id="L134">            return Collections.emptyList(); // o lanza excepción personalizada</span>
         }
     }
 }

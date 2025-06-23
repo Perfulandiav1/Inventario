@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
 Test set: cl.perfulandia.inventario.controller.InventarioControladorTest
 -------------------------------------------------------------------------------
-Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.541 s -- in cl.perfulandia.inventario.controller.InventarioControladorTest
+Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.702 s -- in cl.perfulandia.inventario.controller.InventarioControladorTest
