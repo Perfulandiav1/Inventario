@@ -20,6 +20,7 @@ public class SucursalStock {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long sucursalId;
+    private int cantidad; // Cantidad de stock del producto en la sucursal
     @ManyToOne
     @JoinColumn(name = "producto_id")  // Esta columna será la FK a Producto
     private Producto producto;

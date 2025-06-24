@@ -27,6 +27,10 @@ public class AlertaInventarioService {
      */
     @Autowired
     private AlertaRepositorio alertaRepo;
+    
+    public AlertaInventarioService(AlertaRepositorio alertaRepo) {
+        this.alertaRepo = alertaRepo;
+    }
 
     /**
      * Constructor del servicio de alertas.

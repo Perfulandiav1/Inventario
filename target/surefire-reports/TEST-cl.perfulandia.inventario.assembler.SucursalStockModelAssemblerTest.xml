@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="cl.perfulandia.inventario.controller.InventarioControladorTest" time="0.744" tests="7" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="cl.perfulandia.inventario.assembler.SucursalStockModelAssemblerTest" time="0.031" tests="1" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="22"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -10,7 +10,6 @@
     <property name="user.variant" value=""/>
     <property name="java.vendor.url" value="https://java.oracle.com/"/>
     <property name="user.timezone" value="America/Santiago"/>
-    <property name="org.jboss.logging.provider" value="slf4j"/>
     <property name="os.name" value="Windows 10"/>
     <property name="java.vm.specification.version" value="22"/>
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
@@ -31,8 +30,6 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="FILE_LOG_CHARSET" value="UTF-8"/>
-    <property name="java.awt.headless" value="true"/>
     <property name="surefire.real.class.path" value="C:\Users\USER\AppData\Local\Temp\surefire1480303970272224799\surefirebooter-20250623232341950_3.jar"/>
     <property name="user.script" value=""/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
@@ -51,9 +48,7 @@
     <property name="user.dir" value="C:\Users\USER\Desktop\Inventario"/>
     <property name="os.arch" value="amd64"/>
     <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
-    <property name="PID" value="11588"/>
     <property name="sun.os.patch.level" value=""/>
-    <property name="CONSOLE_LOG_CHARSET" value="UTF-8"/>
     <property name="native.encoding" value="Cp1252"/>
     <property name="java.library.path" value="C:\Program Files\Java\jdk-22\bin;C:\Windows\Sun\Java\bin;C:\Windows\system32;C:\Windows;C:\Program Files\WindowsApps\Microsoft.PowerShell_7.5.1.0_x64__8wekyb3d8bbwe;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Program Files (x86)\Common Files\Oracle\Java\java8path;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\PuTTY\;C:\Program Files\Git\cmd;C:\ProgramData\chocolatey\bin;C:\Users\USER\Desktop\maven\apache-maven-3.9.10\bin;C:\Users\USER\AppData\Local\Programs\Python\Python312\Scripts\;C:\Users\USER\AppData\Local\Programs\Python\Python312\;C:\Users\USER\AppData\Local\Programs\Python\Launcher\;C:\Users\USER\AppData\Local\Microsoft\WindowsApps;C:\Users\USER\AppData\Local\Programs\Microsoft VS Code\bin;C:\Program Files\JetBrains\IntelliJ IDEA 2025.1\bin;;C:\Users\USER\AppData\Local\GitHubDesktop\bin;c:\Users\USER\AppData\Roaming\Code\User\globalStorage\github.copilot-chat\debugCommand;."/>
     <property name="java.vm.info" value="mixed mode, sharing"/>
@@ -62,60 +57,6 @@
     <property name="java.vm.version" value="22.0.1+8-16"/>
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="66.0"/>
-    <property name="LOGGED_APPLICATION_NAME" value="[inventario] "/>
   </properties>
-  <testcase name="testObtenerSucursales" classname="cl.perfulandia.inventario.controller.InventarioControladorTest" time="0.028">
-    <system-out><![CDATA[2025-06-23T23:23:52.993-04:00  INFO 11588 --- [inventario] [           main] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [cl.perfulandia.inventario.controller.InventarioControladorTest]: InventarioControladorTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2025-06-23T23:23:53.030-04:00  INFO 11588 --- [inventario] [           main] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration cl.perfulandia.inventario.InventarioApplication for test class cl.perfulandia.inventario.controller.InventarioControladorTest
-2025-06-23T23:23:53.036-04:00  INFO 11588 --- [inventario] [           main] o.s.b.d.r.RestartApplicationListener     : Restart disabled due to context in which it is running
-
-  .   ____          _            __ _ _
- /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
-( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
- \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
-  '  |____| .__|_| |_|_| |_\__, | / / / /
- =========|_|==============|___/=/_/_/_/
-
- :: Spring Boot ::               (v3.3.10)
-
-2025-06-23T23:23:53.115-04:00  INFO 11588 --- [inventario] [           main] c.p.i.c.InventarioControladorTest        : Starting InventarioControladorTest using Java 22.0.1 with PID 11588 (started by USER in C:\Users\USER\Desktop\Inventario)
-2025-06-23T23:23:53.115-04:00  INFO 11588 --- [inventario] [           main] c.p.i.c.InventarioControladorTest        : No active profile set, falling back to 1 default profile: "default"
-2025-06-23T23:23:53.530-04:00  INFO 11588 --- [inventario] [           main] o.s.v.b.OptionalValidatorFactoryBean     : Failed to set up a Bean Validation provider: jakarta.validation.NoProviderFoundException: Unable to create a Configuration, because no Jakarta Bean Validation provider could be found. Add a provider like Hibernate Validator (RI) to your classpath.
-2025-06-23T23:23:53.592-04:00  INFO 11588 --- [inventario] [           main] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
-2025-06-23T23:23:53.592-04:00  INFO 11588 --- [inventario] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
-2025-06-23T23:23:53.592-04:00  INFO 11588 --- [inventario] [           main] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 0 ms
-2025-06-23T23:23:53.603-04:00  INFO 11588 --- [inventario] [           main] c.p.i.c.InventarioControladorTest        : Started InventarioControladorTest in 0.567 seconds (process running for 11.252)
-2025-06-23T23:23:53.628-04:00  INFO 11588 --- [inventario] [           main] c.p.i.controlador.InventarioControlador  : Obteniendo lista de sucursales
-2025-06-23T23:23:53.629-04:00  INFO 11588 --- [inventario] [           main] c.p.i.controlador.InventarioControlador  : Total de sucursales encontradas: 1
-]]></system-out>
-  </testcase>
-  <testcase name="testObtenerSucursalNoExiste" classname="cl.perfulandia.inventario.controller.InventarioControladorTest" time="0.012">
-    <system-out><![CDATA[2025-06-23T23:23:53.642-04:00  INFO 11588 --- [inventario] [           main] c.p.i.controlador.InventarioControlador  : Obteniendo detalle de la sucursal con ID: 99
-2025-06-23T23:23:53.642-04:00  INFO 11588 --- [inventario] [           main] c.p.i.controlador.InventarioControlador  : Obteniendo detalle de la sucursal con ID: 99
-]]></system-out>
-  </testcase>
-  <testcase name="testObtenerSucursalesVacio" classname="cl.perfulandia.inventario.controller.InventarioControladorTest" time="0.012">
-    <system-out><![CDATA[2025-06-23T23:23:53.659-04:00  INFO 11588 --- [inventario] [           main] c.p.i.controlador.InventarioControlador  : Obteniendo lista de sucursales
-2025-06-23T23:23:53.659-04:00  WARN 11588 --- [inventario] [           main] c.p.i.controlador.InventarioControlador  : No se encontraron sucursales
-]]></system-out>
-  </testcase>
-  <testcase name="testObtenerStock" classname="cl.perfulandia.inventario.controller.InventarioControladorTest" time="0.036">
-    <system-out><![CDATA[2025-06-23T23:23:53.673-04:00  INFO 11588 --- [inventario] [           main] c.p.i.controlador.InventarioControlador  : Obteniendo stock para la sucursal con ID: 1
-]]></system-out>
-  </testcase>
-  <testcase name="listarAlertas_vacio_debeRetornarColeccionVacia" classname="cl.perfulandia.inventario.controller.InventarioControladorTest" time="0.01">
-    <system-out><![CDATA[2025-06-23T23:23:53.707-04:00  INFO 11588 --- [inventario] [           main] c.p.i.controlador.InventarioControlador  : Listando alertas de inventario
-2025-06-23T23:23:53.707-04:00  WARN 11588 --- [inventario] [           main] c.p.i.controlador.InventarioControlador  : No se encontraron alertas de inventario
-]]></system-out>
-  </testcase>
-  <testcase name="obtenerSucursal_idNull_lanzaExcepcion" classname="cl.perfulandia.inventario.controller.InventarioControladorTest" time="0.004">
-    <system-out><![CDATA[2025-06-23T23:23:53.717-04:00  INFO 11588 --- [inventario] [           main] c.p.i.controlador.InventarioControlador  : Obteniendo detalle de la sucursal con ID: null
-2025-06-23T23:23:53.717-04:00 ERROR 11588 --- [inventario] [           main] c.p.i.controlador.InventarioControlador  : ID de sucursal no proporcionado
-]]></system-out>
-  </testcase>
-  <testcase name="testObtenerSucursal" classname="cl.perfulandia.inventario.controller.InventarioControladorTest" time="0.01">
-    <system-out><![CDATA[2025-06-23T23:23:53.725-04:00  INFO 11588 --- [inventario] [           main] c.p.i.controlador.InventarioControlador  : Obteniendo detalle de la sucursal con ID: 2
-2025-06-23T23:23:53.726-04:00  INFO 11588 --- [inventario] [           main] c.p.i.controlador.InventarioControlador  : Obteniendo detalle de la sucursal con ID: 2
-]]></system-out>
-  </testcase>
+  <testcase name="toModel_debeAgregarLinksCorrectos" classname="cl.perfulandia.inventario.assembler.SucursalStockModelAssemblerTest" time="0.024"/>
 </testsuite>

@@ -15,7 +15,7 @@ import cl.perfulandia.inventario.repositorio.AlertaRepositorio;
  * Permite obtener, crear y filtrar alertas por sucursal o producto.
  */
 @Service
-<span class="fc" id="L18">public class AlertaInventarioService {</span>
+public class AlertaInventarioService {
     /**
      * Logger para registrar eventos en el servicio de alertas.
      * Utilizado para depuración y seguimiento de operaciones.
@@ -27,20 +27,24 @@ import cl.perfulandia.inventario.repositorio.AlertaRepositorio;
      */
     @Autowired
     private AlertaRepositorio alertaRepo;
+    
+<span class="fc" id="L31">    public AlertaInventarioService(AlertaRepositorio alertaRepo) {</span>
+<span class="fc" id="L32">        this.alertaRepo = alertaRepo;</span>
+<span class="fc" id="L33">    }</span>
 
     /**
      * Constructor del servicio de alertas.
      * Inyecta el repositorio de alertas para realizar operaciones de acceso a datos.
      */
     public List&lt;AlertaInventario&gt; obtenerTodasAlertas() {
-<span class="fc" id="L36">        logger.info(&quot;Obteniendo todas las alertas de inventario&quot;);</span>
-<span class="fc" id="L37">        List&lt;AlertaInventario&gt; alertas = alertaRepo.findAll();</span>
-<span class="pc bpc" id="L38" title="1 of 2 branches missed.">        if (alertas.isEmpty()) {</span>
-<span class="nc" id="L39">            logger.warn(&quot;No se encontraron alertas de inventario&quot;);</span>
-<span class="nc" id="L40">            return List.of();</span>
+<span class="fc" id="L40">        logger.info(&quot;Obteniendo todas las alertas de inventario&quot;);</span>
+<span class="fc" id="L41">        List&lt;AlertaInventario&gt; alertas = alertaRepo.findAll();</span>
+<span class="pc bpc" id="L42" title="1 of 2 branches missed.">        if (alertas.isEmpty()) {</span>
+<span class="nc" id="L43">            logger.warn(&quot;No se encontraron alertas de inventario&quot;);</span>
+<span class="nc" id="L44">            return List.of();</span>
         }
-<span class="fc" id="L42">        logger.info(&quot;Total de alertas encontradas: {}&quot;, alertas.size());</span>
-<span class="fc" id="L43">        return alertas;</span>
+<span class="fc" id="L46">        logger.info(&quot;Total de alertas encontradas: {}&quot;, alertas.size());</span>
+<span class="fc" id="L47">        return alertas;</span>
     }
     /**
      * Obtiene las alertas de inventario filtradas por ID de sucursal.
@@ -48,12 +52,12 @@ import cl.perfulandia.inventario.repositorio.AlertaRepositorio;
      * @return Una lista de AlertaInventario asociada a la sucursal especificada.
      */
     public List&lt;AlertaInventario&gt; obtenerAlertasPorSucursal(Long sucursalId) {
-<span class="fc" id="L51">        logger.info(&quot;Obteniendo alertas para la sucursal con ID: {}&quot;, sucursalId);</span>
-<span class="pc bpc" id="L52" title="1 of 2 branches missed.">        if (sucursalId == null) {</span>
-<span class="nc" id="L53">            logger.error(&quot;ID de sucursal no proporcionado&quot;);</span>
-<span class="nc" id="L54">            throw new IllegalArgumentException(&quot;El ID de sucursal no puede ser nulo&quot;);</span>
+<span class="fc" id="L55">        logger.info(&quot;Obteniendo alertas para la sucursal con ID: {}&quot;, sucursalId);</span>
+<span class="pc bpc" id="L56" title="1 of 2 branches missed.">        if (sucursalId == null) {</span>
+<span class="nc" id="L57">            logger.error(&quot;ID de sucursal no proporcionado&quot;);</span>
+<span class="nc" id="L58">            throw new IllegalArgumentException(&quot;El ID de sucursal no puede ser nulo&quot;);</span>
         }
-<span class="fc" id="L56">        return alertaRepo.findBySucursalId(sucursalId);</span>
+<span class="fc" id="L60">        return alertaRepo.findBySucursalId(sucursalId);</span>
     }
 
     /**
@@ -62,12 +66,12 @@ import cl.perfulandia.inventario.repositorio.AlertaRepositorio;
      * @return Una lista de AlertaInventario asociada al producto especificado.
      */
     public List&lt;AlertaInventario&gt; obtenerAlertasPorProducto(Long productoId) {
-<span class="fc" id="L65">        logger.info(&quot;Obteniendo alertas para el producto con ID: {}&quot;, productoId);</span>
-<span class="pc bpc" id="L66" title="1 of 2 branches missed.">        if (productoId == null) {</span>
-<span class="nc" id="L67">            logger.error(&quot;ID de producto no proporcionado&quot;);</span>
-<span class="nc" id="L68">            throw new IllegalArgumentException(&quot;El ID de producto no puede ser nulo&quot;);</span>
+<span class="fc" id="L69">        logger.info(&quot;Obteniendo alertas para el producto con ID: {}&quot;, productoId);</span>
+<span class="fc bfc" id="L70" title="All 2 branches covered.">        if (productoId == null) {</span>
+<span class="fc" id="L71">            logger.error(&quot;ID de producto no proporcionado&quot;);</span>
+<span class="fc" id="L72">            throw new IllegalArgumentException(&quot;El ID de producto no puede ser nulo&quot;);</span>
         }
-<span class="fc" id="L70">        return alertaRepo.findByProductoId(productoId);</span>
+<span class="fc" id="L74">        return alertaRepo.findByProductoId(productoId);</span>
     }
 
     /**
@@ -77,16 +81,16 @@ import cl.perfulandia.inventario.repositorio.AlertaRepositorio;
      * @return Una lista de AlertaInventario asociada a la sucursal y producto especificados.
      */
     public List&lt;AlertaInventario&gt; obtenerAlertasPorSucursalYProducto(Long sucursalId, Long productoId) {
-<span class="fc" id="L80">        logger.info(&quot;Obteniendo alertas para la sucursal con ID: {} y producto con ID: {}&quot;, sucursalId, productoId);</span>
-<span class="pc bpc" id="L81" title="1 of 2 branches missed.">        if (sucursalId == null) {</span>
-<span class="nc" id="L82">            logger.error(&quot;ID de sucursal no proporcionado&quot;);</span>
-<span class="nc" id="L83">            throw new IllegalArgumentException(&quot;El ID de sucursal no puede ser nulo&quot;);</span>
+<span class="fc" id="L84">        logger.info(&quot;Obteniendo alertas para la sucursal con ID: {} y producto con ID: {}&quot;, sucursalId, productoId);</span>
+<span class="fc bfc" id="L85" title="All 2 branches covered.">        if (sucursalId == null) {</span>
+<span class="fc" id="L86">            logger.error(&quot;ID de sucursal no proporcionado&quot;);</span>
+<span class="fc" id="L87">            throw new IllegalArgumentException(&quot;El ID de sucursal no puede ser nulo&quot;);</span>
         }
-<span class="pc bpc" id="L85" title="1 of 2 branches missed.">        if (productoId == null) {</span>
-<span class="nc" id="L86">            logger.error(&quot;ID de producto no proporcionado&quot;);</span>
-<span class="nc" id="L87">            throw new IllegalArgumentException(&quot;El ID de producto no puede ser nulo&quot;);</span>
+<span class="fc bfc" id="L89" title="All 2 branches covered.">        if (productoId == null) {</span>
+<span class="fc" id="L90">            logger.error(&quot;ID de producto no proporcionado&quot;);</span>
+<span class="fc" id="L91">            throw new IllegalArgumentException(&quot;El ID de producto no puede ser nulo&quot;);</span>
         }
-<span class="fc" id="L89">        return alertaRepo.findBySucursalIdAndProductoId(sucursalId, productoId);</span>
+<span class="fc" id="L93">        return alertaRepo.findBySucursalIdAndProductoId(sucursalId, productoId);</span>
     }
 
     /*
@@ -94,13 +98,13 @@ import cl.perfulandia.inventario.repositorio.AlertaRepositorio;
      * @param alerta La alerta de inventario a crear.
      */
     public void crearAlerta(AlertaInventario alerta) {
-<span class="fc" id="L97">        logger.info(&quot;Creando nueva alerta de inventario: {}&quot;, alerta);</span>
-<span class="pc bpc" id="L98" title="1 of 2 branches missed.">        if (alerta == null) {</span>
-<span class="nc" id="L99">            logger.error(&quot;Alerta no puede ser nula&quot;);</span>
-<span class="nc" id="L100">            throw new IllegalArgumentException(&quot;La alerta no puede ser nula&quot;);</span>
+<span class="fc" id="L101">        logger.info(&quot;Creando nueva alerta de inventario: {}&quot;, alerta);</span>
+<span class="fc bfc" id="L102" title="All 2 branches covered.">        if (alerta == null) {</span>
+<span class="fc" id="L103">            logger.error(&quot;Alerta no puede ser nula&quot;);</span>
+<span class="fc" id="L104">            throw new IllegalArgumentException(&quot;La alerta no puede ser nula&quot;);</span>
         }
-<span class="fc" id="L102">        alerta.setFechaHora(LocalDateTime.now());</span>
-<span class="fc" id="L103">        alertaRepo.save(alerta);</span>
-<span class="fc" id="L104">    }</span>
+<span class="fc" id="L106">        alerta.setFechaHora(LocalDateTime.now());</span>
+<span class="fc" id="L107">        alertaRepo.save(alerta);</span>
+<span class="fc" id="L108">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.10.202304240956</span></div></body></html>

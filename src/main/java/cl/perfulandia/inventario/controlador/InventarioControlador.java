@@ -134,16 +134,12 @@ public class InventarioControlador {
     @GetMapping("/sucursales")
     public ResponseEntity<List<SucursalDTO>> obtenerSucursales() {
         logger.info("Obteniendo lista de sucursales");
-        if (inventarioService.obtenerSucursales().isEmpty()) {
-            logger.warn("No se encontraron sucursales");
-            return ResponseEntity.noContent().build();
-        }
         List<SucursalDTO> sucursales = inventarioService.obtenerSucursales();
-        logger.info("Total de sucursales encontradas: {}", sucursales.size());
         if (sucursales.isEmpty()) {
             logger.warn("No se encontraron sucursales");
             return ResponseEntity.noContent().build();
         }
+        logger.info("Total de sucursales encontradas: {}", sucursales.size());
         return ResponseEntity.ok(sucursales);
     }
     /*

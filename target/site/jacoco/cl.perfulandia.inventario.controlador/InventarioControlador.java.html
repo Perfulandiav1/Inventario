@@ -105,12 +105,12 @@ public class InventarioControlador {
      */
     @GetMapping(&quot;/alertas&quot;)
     public CollectionModel&lt;EntityModel&lt;AlertaInventario&gt;&gt; listarAlertas() {
-<span class="nc" id="L108">        logger.info(&quot;Listando alertas de inventario&quot;);</span>
-<span class="nc" id="L109">        List&lt;AlertaInventario&gt; alertas = inventarioService.listarAlertas();</span>
-<span class="nc bnc" id="L110" title="All 2 branches missed.">        if (alertas.isEmpty()) {</span>
-<span class="nc" id="L111">            logger.warn(&quot;No se encontraron alertas de inventario&quot;);</span>
-<span class="nc" id="L112">            return CollectionModel.&lt;EntityModel&lt;AlertaInventario&gt;&gt;of(Collections.emptyList())</span>
-<span class="nc" id="L113">                    .add(linkTo(methodOn(InventarioControlador.class).listarAlertas()).withSelfRel());</span>
+<span class="fc" id="L108">        logger.info(&quot;Listando alertas de inventario&quot;);</span>
+<span class="fc" id="L109">        List&lt;AlertaInventario&gt; alertas = inventarioService.listarAlertas();</span>
+<span class="pc bpc" id="L110" title="1 of 2 branches missed.">        if (alertas.isEmpty()) {</span>
+<span class="fc" id="L111">            logger.warn(&quot;No se encontraron alertas de inventario&quot;);</span>
+<span class="fc" id="L112">            return CollectionModel.&lt;EntityModel&lt;AlertaInventario&gt;&gt;of(Collections.emptyList())</span>
+<span class="fc" id="L113">                    .add(linkTo(methodOn(InventarioControlador.class).listarAlertas()).withSelfRel());</span>
         }
 <span class="nc" id="L115">        List&lt;EntityModel&lt;AlertaInventario&gt;&gt; alertasModel = alertas.stream()</span>
 <span class="nc" id="L116">                .map(alertaInventarioModelAssembler::toModel)</span>
@@ -134,17 +134,13 @@ public class InventarioControlador {
     @GetMapping(&quot;/sucursales&quot;)
     public ResponseEntity&lt;List&lt;SucursalDTO&gt;&gt; obtenerSucursales() {
 <span class="fc" id="L136">        logger.info(&quot;Obteniendo lista de sucursales&quot;);</span>
-<span class="fc bfc" id="L137" title="All 2 branches covered.">        if (inventarioService.obtenerSucursales().isEmpty()) {</span>
-<span class="fc" id="L138">            logger.warn(&quot;No se encontraron sucursales&quot;);</span>
-<span class="fc" id="L139">            return ResponseEntity.noContent().build();</span>
+<span class="fc" id="L137">        List&lt;SucursalDTO&gt; sucursales = inventarioService.obtenerSucursales();</span>
+<span class="fc bfc" id="L138" title="All 2 branches covered.">        if (sucursales.isEmpty()) {</span>
+<span class="fc" id="L139">            logger.warn(&quot;No se encontraron sucursales&quot;);</span>
+<span class="fc" id="L140">            return ResponseEntity.noContent().build();</span>
         }
-<span class="fc" id="L141">        List&lt;SucursalDTO&gt; sucursales = inventarioService.obtenerSucursales();</span>
 <span class="fc" id="L142">        logger.info(&quot;Total de sucursales encontradas: {}&quot;, sucursales.size());</span>
-<span class="pc bpc" id="L143" title="1 of 2 branches missed.">        if (sucursales.isEmpty()) {</span>
-<span class="nc" id="L144">            logger.warn(&quot;No se encontraron sucursales&quot;);</span>
-<span class="nc" id="L145">            return ResponseEntity.noContent().build();</span>
-        }
-<span class="fc" id="L147">        return ResponseEntity.ok(sucursales);</span>
+<span class="fc" id="L143">        return ResponseEntity.ok(sucursales);</span>
     }
     /*
      * Endpoint para obtener el detalle de una sucursal específica por su ID.
@@ -165,14 +161,14 @@ public class InventarioControlador {
      */
     @GetMapping(&quot;/sucursal/{sucursalId}&quot;)
     public ResponseEntity&lt;SucursalDTO&gt; obtenerSucursal(@PathVariable Long sucursalId) {
-<span class="fc" id="L168">        logger.info(&quot;Obteniendo detalle de la sucursal con ID: {}&quot;, sucursalId);</span>
-<span class="pc bpc" id="L169" title="1 of 2 branches missed.">        if (sucursalId == null) {</span>
-<span class="nc" id="L170">            logger.error(&quot;ID de sucursal no proporcionado&quot;);</span>
-<span class="nc" id="L171">            throw new IllegalArgumentException(&quot;El ID de sucursal no puede ser nulo&quot;);</span>
+<span class="fc" id="L164">        logger.info(&quot;Obteniendo detalle de la sucursal con ID: {}&quot;, sucursalId);</span>
+<span class="fc bfc" id="L165" title="All 2 branches covered.">        if (sucursalId == null) {</span>
+<span class="fc" id="L166">            logger.error(&quot;ID de sucursal no proporcionado&quot;);</span>
+<span class="fc" id="L167">            throw new IllegalArgumentException(&quot;El ID de sucursal no puede ser nulo&quot;);</span>
         }
-<span class="fc" id="L173">        logger.info(&quot;Obteniendo detalle de la sucursal con ID: {}&quot;, sucursalId);</span>
-<span class="fc" id="L174">        SucursalDTO sucursal = inventarioService.obtenerSucursalDetalle(sucursalId);</span>
-<span class="fc" id="L175">        return ResponseEntity.ok(sucursal);</span>
+<span class="fc" id="L169">        logger.info(&quot;Obteniendo detalle de la sucursal con ID: {}&quot;, sucursalId);</span>
+<span class="fc" id="L170">        SucursalDTO sucursal = inventarioService.obtenerSucursalDetalle(sucursalId);</span>
+<span class="fc" id="L171">        return ResponseEntity.ok(sucursal);</span>
     }
 
 }

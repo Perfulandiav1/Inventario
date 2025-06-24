@@ -53,8 +53,11 @@ public class MovimientoController {
      * Constructor del controlador de movimientos.
      * Inyecta el servicio de movimientos y el ensamblador de modelos para convertir entidades en modelos HATEOAS.
      */
-    public MovimientoController(MovimientoModelAssembler movimientoAssembler) {
-        this.movimientoAssembler = movimientoAssembler;
+    
+
+    public MovimientoController(MovimientoService movimientoService, MovimientoModelAssembler movimientoModelAssembler) {
+        this.movimientoService = movimientoService;
+        this.movimientoAssembler = movimientoModelAssembler;
     }
     
     /*

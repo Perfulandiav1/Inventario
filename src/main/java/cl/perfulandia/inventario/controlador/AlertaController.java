@@ -143,7 +143,7 @@ public class AlertaController {
      * @param sucursalId ID de la sucursal para la cual se desean obtener las alertas.
      */
     @GetMapping("/obtener/sucursal/{sucursalId}/producto/{productoId}")
-    public ResponseEntity<List<AlertaInventario>> listarPorSucursalYProducto(@PathVariable Long sucursalId, @PathVariable Long productoId) {
+    public ResponseEntity<List<AlertaInventario>> listarPorSucursalYProducto(@PathVariable ("sucursalId")Long sucursalId, @PathVariable ("productoId") Long productoId) {
         logger.info("Listando alertas para la sucursal con ID: {} y producto con ID: {}", sucursalId, productoId);
         if (sucursalId == null || productoId == null) {
             logger.error("ID de sucursal o producto no proporcionado");

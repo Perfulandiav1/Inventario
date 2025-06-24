@@ -21,9 +21,9 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
      */
     @Override
     public EntityModel&lt;SucursalStock&gt; toModel(SucursalStock sucursalStock) {
-<span class="nc" id="L24">        return EntityModel.of(sucursalStock,</span>
-<span class="nc" id="L25">            linkTo(methodOn(InventarioControlador.class).obtenerSucursal(sucursalStock.getId())).withRel(&quot;Sucursal por ID&quot;),</span>
-<span class="nc" id="L26">            linkTo(methodOn(InventarioControlador.class).obtenerSucursales()).withRel(&quot;Todas las sucursales&quot;));</span>
+<span class="fc" id="L24">        return EntityModel.of(sucursalStock,</span>
+<span class="fc" id="L25">            linkTo(methodOn(InventarioControlador.class).obtenerSucursal(sucursalStock.getId())).withRel(&quot;Sucursal por ID&quot;),</span>
+<span class="fc" id="L26">            linkTo(methodOn(InventarioControlador.class).obtenerSucursales()).withRel(&quot;Todas las sucursales&quot;));</span>
     
     }
 

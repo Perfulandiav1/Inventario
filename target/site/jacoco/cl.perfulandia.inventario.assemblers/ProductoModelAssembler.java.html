@@ -20,12 +20,12 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
      */
     @Override
     public EntityModel&lt;Producto&gt; toModel(Producto producto) {
-<span class="nc" id="L23">        return EntityModel.of(producto,</span>
-<span class="nc" id="L24">            linkTo(methodOn(ProductoController.class).obtenerProductoPorId(producto.getId())).withRel(&quot;Producto por ID&quot;),</span>
-<span class="nc" id="L25">            linkTo(methodOn(ProductoController.class).listarProductos()).withRel(&quot;Todos los productos&quot;),</span>
-<span class="nc" id="L26">            linkTo(methodOn(ProductoController.class).crearProducto(producto)).withRel(&quot;Crear producto&quot;),</span>
-<span class="nc" id="L27">            linkTo(methodOn(ProductoController.class).actualizarProducto(producto.getId(), producto)).withRel(&quot;Actualizar producto&quot;),</span>
-<span class="nc" id="L28">            linkTo(methodOn(ProductoController.class).eliminarProducto(producto.getId())).withRel(&quot;Eliminar producto&quot;)</span>
+<span class="fc" id="L23">        return EntityModel.of(producto,</span>
+<span class="fc" id="L24">            linkTo(methodOn(ProductoController.class).obtenerProductoPorId(producto.getId())).withRel(&quot;Producto por ID&quot;),</span>
+<span class="fc" id="L25">            linkTo(methodOn(ProductoController.class).listarProductos()).withRel(&quot;Todos los productos&quot;),</span>
+<span class="fc" id="L26">            linkTo(methodOn(ProductoController.class).crearProducto(producto)).withRel(&quot;Crear producto&quot;),</span>
+<span class="fc" id="L27">            linkTo(methodOn(ProductoController.class).actualizarProducto(producto.getId(), producto)).withRel(&quot;Actualizar producto&quot;),</span>
+<span class="fc" id="L28">            linkTo(methodOn(ProductoController.class).eliminarProducto(producto.getId())).withRel(&quot;Eliminar producto&quot;)</span>
         );
     }
 }

@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: cl.perfulandia.inventario.assembler.MovimientoModelAssemblerTest
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.137 s -- in cl.perfulandia.inventario.assembler.MovimientoModelAssemblerTest

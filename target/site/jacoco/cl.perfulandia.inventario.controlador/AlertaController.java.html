@@ -95,15 +95,15 @@ public class AlertaController {
      */
     @GetMapping(&quot;/obtener/{id}&quot;)
     public EntityModel&lt;AlertaInventario&gt; obtenerPorId(@PathVariable Long sucursalId) {
-<span class="nc" id="L98">        logger.info(&quot;Obteniendo alerta para la sucursal con ID: {}&quot;, sucursalId);</span>
-<span class="nc bnc" id="L99" title="All 2 branches missed.">        if (sucursalId == null) {</span>
-<span class="nc" id="L100">            logger.error(&quot;ID de sucursal no proporcionado&quot;);</span>
-<span class="nc" id="L101">            throw new IllegalArgumentException(&quot;El ID de sucursal no puede ser nulo&quot;);</span>
+<span class="fc" id="L98">        logger.info(&quot;Obteniendo alerta para la sucursal con ID: {}&quot;, sucursalId);</span>
+<span class="fc bfc" id="L99" title="All 2 branches covered.">        if (sucursalId == null) {</span>
+<span class="fc" id="L100">            logger.error(&quot;ID de sucursal no proporcionado&quot;);</span>
+<span class="fc" id="L101">            throw new IllegalArgumentException(&quot;El ID de sucursal no puede ser nulo&quot;);</span>
         }
-<span class="nc" id="L103">        AlertaInventario alerta = alertaService.obtenerAlertasPorSucursal(sucursalId).stream().findFirst()</span>
-<span class="nc" id="L104">                .orElseThrow(() -&gt; new RuntimeException(&quot;Alerta no encontrada para la sucursal con ID: &quot; + sucursalId));</span>
-<span class="nc" id="L105">        logger.info(&quot;Alerta obtenida correctamente para la sucursal con ID: {}&quot;, sucursalId);</span>
-<span class="nc" id="L106">        return alertaModelAssembler.toModel(alerta);</span>
+<span class="fc" id="L103">        AlertaInventario alerta = alertaService.obtenerAlertasPorSucursal(sucursalId).stream().findFirst()</span>
+<span class="fc" id="L104">                .orElseThrow(() -&gt; new RuntimeException(&quot;Alerta no encontrada para la sucursal con ID: &quot; + sucursalId));</span>
+<span class="fc" id="L105">        logger.info(&quot;Alerta obtenida correctamente para la sucursal con ID: {}&quot;, sucursalId);</span>
+<span class="fc" id="L106">        return alertaModelAssembler.toModel(alerta);</span>
     }
     /*
      * Endpoint para listar alertas por ID de producto.
@@ -143,7 +143,7 @@ public class AlertaController {
      * @param sucursalId ID de la sucursal para la cual se desean obtener las alertas.
      */
     @GetMapping(&quot;/obtener/sucursal/{sucursalId}/producto/{productoId}&quot;)
-    public ResponseEntity&lt;List&lt;AlertaInventario&gt;&gt; listarPorSucursalYProducto(@PathVariable Long sucursalId, @PathVariable Long productoId) {
+    public ResponseEntity&lt;List&lt;AlertaInventario&gt;&gt; listarPorSucursalYProducto(@PathVariable (&quot;sucursalId&quot;)Long sucursalId, @PathVariable (&quot;productoId&quot;) Long productoId) {
 <span class="fc" id="L147">        logger.info(&quot;Listando alertas para la sucursal con ID: {} y producto con ID: {}&quot;, sucursalId, productoId);</span>
 <span class="pc bpc" id="L148" title="2 of 4 branches missed.">        if (sucursalId == null || productoId == null) {</span>
 <span class="nc" id="L149">            logger.error(&quot;ID de sucursal o producto no proporcionado&quot;);</span>

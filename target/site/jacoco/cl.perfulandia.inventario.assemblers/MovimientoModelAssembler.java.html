@@ -19,11 +19,11 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
      */
     @Override
     public EntityModel&lt;Movimiento&gt; toModel(Movimiento movimiento) {
-<span class="nc" id="L22">        return EntityModel.of(movimiento,</span>
-<span class="nc" id="L23">            linkTo(methodOn(MovimientoController.class).obtenerMovimiento(movimiento.getId())).withRel(&quot;Movimiento por ID&quot;),</span>
-<span class="nc" id="L24">            linkTo(methodOn(MovimientoController.class).listarMovimientos()).withRel(&quot;Todos los movimientos&quot;),</span>
-<span class="nc" id="L25">            linkTo(methodOn(MovimientoController.class).registrarMovimiento(movimiento)).withRel(&quot;Crear movimiento&quot;),</span>
-<span class="nc" id="L26">            linkTo(methodOn(MovimientoController.class).eliminarMovimiento(movimiento.getId())).withRel(&quot;Eliminar movimiento&quot;)</span>
+<span class="fc" id="L22">        return EntityModel.of(movimiento,</span>
+<span class="fc" id="L23">            linkTo(methodOn(MovimientoController.class).obtenerMovimiento(movimiento.getId())).withRel(&quot;Movimiento por ID&quot;),</span>
+<span class="fc" id="L24">            linkTo(methodOn(MovimientoController.class).listarMovimientos()).withRel(&quot;Todos los movimientos&quot;),</span>
+<span class="fc" id="L25">            linkTo(methodOn(MovimientoController.class).registrarMovimiento(movimiento)).withRel(&quot;Crear movimiento&quot;),</span>
+<span class="fc" id="L26">            linkTo(methodOn(MovimientoController.class).eliminarMovimiento(movimiento.getId())).withRel(&quot;Eliminar movimiento&quot;)</span>
         );
     }
 

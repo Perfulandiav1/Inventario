@@ -26,7 +26,7 @@ public class AlertaInventarioModelAssembler implements RepresentationModelAssemb
                 alertaInventario.getProductoId())).withRel("Alertas por sucursal y producto"),
             linkTo(methodOn(AlertaController.class).listarPorProducto(alertaInventario.getProductoId())).withRel("Alertas por producto"),
             linkTo(methodOn(InventarioControlador.class).obtenerSucursal(alertaInventario.getSucursalId())).withRel("sucursal")
-);
+        );
     }
 
 }
