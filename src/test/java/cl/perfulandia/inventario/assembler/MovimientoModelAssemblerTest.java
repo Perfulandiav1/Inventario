@@ -5,18 +5,25 @@ import cl.perfulandia.inventario.modelo.Movimiento;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.hateoas.EntityModel;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * Test para el ensamblador de modelos de Movimiento.
+ */
 class MovimientoModelAssemblerTest {
-
+     /*
+        * Este test verifica que el ensamblador de modelos de Movimiento
+        * agrega los enlaces correctos al modelo.
+        */
     private MovimientoModelAssembler assembler;
 
     @BeforeEach
     void setUp() {
         assembler = new MovimientoModelAssembler();
     }
-
+    /**
+     * Verifica que el método toModel agrega los enlaces correctos al modelo de Movimiento.
+     */
     @Test
     void toModel_debeAgregarLinksCorrectos() {
         // Arrange

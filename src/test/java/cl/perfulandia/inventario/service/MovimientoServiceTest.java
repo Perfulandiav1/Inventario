@@ -6,10 +6,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.*;
 import java.util.*;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+/**
+ * Test para el servicio de movimientos de inventario.
+ * Verifica que los métodos del servicio funcionen correctamente.
+ */
 class MovimientoServiceTest {
 
     @InjectMocks
@@ -28,7 +31,10 @@ class MovimientoServiceTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
     }
-
+    /**
+     * Verifica que el servicio pueda registrar un movimiento de entrada o salida de inventario.
+     * Se simulan diferentes escenarios y se verifica que el servicio maneje correctamente cada caso.
+     */
     @Test
     void registrarMovimiento_entrada_valido() {
         Long sucursalId = 1L, productoId = 2L;
@@ -52,7 +58,10 @@ class MovimientoServiceTest {
         assertEquals(2, mov.getCantidad());
         verify(alertaRepo, never()).save(any(AlertaInventario.class)); // stock queda en 5, no debe crear alerta
     }
-
+    /**
+     * Verifica que el servicio pueda registrar un movimiento de salida de inventario.
+     * Se simulan diferentes escenarios y se verifica que el servicio maneje correctamente cada caso.
+     */ 
     @Test
     void registrarMovimiento_salida_valido() {
         Long sucursalId = 1L, productoId = 2L;
@@ -76,7 +85,10 @@ class MovimientoServiceTest {
         assertEquals(3, mov.getCantidad());
         verify(alertaRepo, never()).save(any());
     }
-
+    /**
+     * Verifica que el servicio maneje correctamente los casos de error al registrar un movimiento.
+     * Se simulan diferentes escenarios de error y se verifica que se lancen las excepciones adecuadas.
+     */
     @Test
     void registrarMovimiento_tipoInvalido() {
         Exception ex = assertThrows(IllegalArgumentException.class, () ->
@@ -84,7 +96,10 @@ class MovimientoServiceTest {
         );
         assertTrue(ex.getMessage().contains("Tipo de movimiento inválido"));
     }
-
+    /**
+     * Verifica que el servicio maneje correctamente los casos de error al registrar un movimiento.
+     * Se simulan diferentes escenarios de error y se verifica que se lancen las excepciones adecuadas.
+     */
     @Test
     void registrarMovimiento_productoNoEncontrado() {
         when(productoRepo.findById(anyLong())).thenReturn(Optional.empty());
@@ -93,7 +108,10 @@ class MovimientoServiceTest {
         );
         assertTrue(ex.getMessage().contains("Producto no encontrado"));
     }
-
+    /**
+     * Verifica que el servicio maneje correctamente los casos de error al registrar un movimiento.
+     * Se simulan diferentes escenarios de error y se verifica que se lancen las excepciones adecuadas.
+     */
     @Test
     void registrarMovimiento_stockInsuficiente() {
         Long sucursalId = 1L, productoId = 2L;
@@ -113,7 +131,10 @@ class MovimientoServiceTest {
         );
         assertTrue(ex.getMessage().contains("Stock insuficiente"));
     }
-
+    /**
+     * Verifica que el servicio cree una alerta cuando el stock de un producto baja de un umbral mínimo.
+     * Se simula un stock bajo y se verifica que se cree una alerta.
+     */
     @Test
     void registrarMovimiento_creaAlertaPorStockBajo() {
         Long sucursalId = 1L, productoId = 2L;
@@ -135,7 +156,10 @@ class MovimientoServiceTest {
 
         verify(alertaRepo, times(1)).save(any(AlertaInventario.class));
     }
-
+    /**
+     * Verifica que el servicio maneje correctamente los casos de error al registrar un movimiento.
+     * Se simulan diferentes escenarios de error y se verifica que se lancen las excepciones adecuadas.
+     */
     @Test
     void listarMovimientos_debeRetornarLista() {
         Movimiento mov = new Movimiento();
@@ -147,7 +171,10 @@ class MovimientoServiceTest {
         assertEquals(1, resultado.size());
         assertEquals(1L, resultado.get(0).getId());
     }
-
+    /**
+     * Verifica que el servicio obtenga un movimiento por ID.
+     * Se simulan diferentes escenarios y se verifica que se retorne el movimiento correcto o se lance una excepción.
+     */
     @Test
     void obtenerMovimientoPorId_existente() {
         Movimiento mov = new Movimiento();
@@ -159,7 +186,10 @@ class MovimientoServiceTest {
 
         assertEquals(1L, resultado.getId());
     }
-
+    /**
+     * Verifica que el servicio maneje correctamente los casos de error al obtener un movimiento por ID.
+     * Se simulan diferentes escenarios de error y se verifica que se lancen las excepciones adecuadas.
+     */
     @Test
     void obtenerMovimientoPorId_noExistente() {
         when(movimientoRepo.findById(1L)).thenReturn(Optional.empty());
@@ -167,7 +197,10 @@ class MovimientoServiceTest {
         Exception ex = assertThrows(RuntimeException.class, () -> movimientoService.obtenerMovimientoPorId(1L));
         assertTrue(ex.getMessage().contains("Movimiento no encontrado"));
     }
-
+    /**
+     * Verifica que el servicio obtenga movimientos por sucursal o producto.
+     * Se simulan diferentes escenarios y se verifica que se retorne la lista correcta de movimientos.
+     */
     @Test
     void listarPorSucursal_debeRetornarLista() {
         Movimiento mov = new Movimiento();
@@ -179,7 +212,10 @@ class MovimientoServiceTest {
         assertEquals(1, resultado.size());
         assertEquals(1L, resultado.get(0).getId());
     }
-
+/**
+     * Verifica que el servicio obtenga movimientos por producto.
+     * Se simulan diferentes escenarios y se verifica que se retorne la lista correcta de movimientos.
+     */
     @Test
     void listarPorProducto_debeRetornarLista() {
         Movimiento mov = new Movimiento();
@@ -191,7 +227,10 @@ class MovimientoServiceTest {
         assertEquals(1, resultado.size());
         assertEquals(1L, resultado.get(0).getId());
     }
-
+    /**
+     * Verifica que el servicio elimine un movimiento existente.
+     * Se simulan diferentes escenarios y se verifica que se elimine correctamente o se lance una excepción si no existe.
+     */
     @Test
     void eliminarMovimiento_existente() {
         when(movimientoRepo.existsById(1L)).thenReturn(true);
@@ -201,7 +240,10 @@ class MovimientoServiceTest {
 
         verify(movimientoRepo, times(1)).deleteById(1L);
     }
-
+    /**
+     * Verifica que el servicio maneje correctamente los casos de error al eliminar un movimiento.
+     * Se simulan diferentes escenarios de error y se verifica que se lancen las excepciones adecuadas.
+     */
     @Test
     void eliminarMovimiento_noExistente() {
         when(movimientoRepo.existsById(1L)).thenReturn(false);

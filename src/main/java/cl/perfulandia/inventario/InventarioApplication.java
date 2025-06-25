@@ -9,7 +9,10 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @SpringBootApplication
 @EnableFeignClients
 public class InventarioApplication {
-
+	/**
+	 * Método principal que inicia la aplicación de inventario.
+	 * @param args Argumentos de línea de comandos.
+	 */
 	public static void main(String[] args) {
 		SpringApplication.run(InventarioApplication.class, args);
 	}

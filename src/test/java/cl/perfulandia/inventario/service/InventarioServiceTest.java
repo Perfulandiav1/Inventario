@@ -13,7 +13,10 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-
+/**
+ * Test para el servicio de inventario.
+ * Verifica que los métodos del servicio funcionen correctamente.
+ */
 class InventarioServiceTest {
 
     @Mock
@@ -32,7 +35,10 @@ class InventarioServiceTest {
         inventarioService = new InventarioService(sucursalStockRepo, alertaRepo);
         inventarioService.setSucursalClient(sucursalClient);
     }
-
+    /**
+     * Verifica que el servicio pueda obtener el stock de una sucursal.
+     * Se simula una lista de SucursalStock y se verifica que el servicio las retorne correctamente.
+     */
     @Test
     void testObtenerStockPorSucursal() {
         Long sucursalId = 1L;
@@ -44,7 +50,10 @@ class InventarioServiceTest {
         assertEquals(expected, result);
         verify(sucursalStockRepo).findBySucursalId(sucursalId);
     }
-
+    /**
+     * Verifica que el servicio pueda obtener el stock de una sucursal.
+     * Se simula una lista vacía y se verifica que el servicio retorne una lista vacía.
+     */
     @Test
     void testObtenerSucursalDetalle() {
         Long sucursalId = 2L;
@@ -56,7 +65,10 @@ class InventarioServiceTest {
         assertEquals(dto, result);
         verify(sucursalClient).obtenerSucursalPorId(sucursalId);
     }
-
+    /**
+     * Verifica que el servicio pueda obtener el stock de una sucursal.
+     * Se simula una excepción y se verifica que el servicio retorne null.
+     */
     @Test
     void testListarAlertas() {
         List<AlertaInventario> alertas = Arrays.asList(new AlertaInventario(), new AlertaInventario());
@@ -67,7 +79,10 @@ class InventarioServiceTest {
         assertEquals(alertas, result);
         verify(alertaRepo).findAll();
     }
-
+    /**
+     * Verifica que el servicio pueda obtener el stock de una sucursal.
+     * Se simula una excepción y se verifica que el servicio retorne una lista vacía.
+     */
     @Test
     void testObtenerSucursalPorIdSuccess() {
         Long id = 3L;
@@ -79,7 +94,10 @@ class InventarioServiceTest {
         assertEquals(dto, result);
         verify(sucursalClient).obtenerSucursalPorId(id);
     }
-
+    /**
+     * Verifica que el servicio pueda obtener el stock de una sucursal.
+     * Se simula una excepción y se verifica que el servicio retorne null.
+     */
     @Test
     void testObtenerSucursalPorIdException() {
         Long id = 4L;
@@ -90,7 +108,10 @@ class InventarioServiceTest {
         assertNull(result);
         verify(sucursalClient).obtenerSucursalPorId(id);
     }
-
+    /**
+     * Verifica que el servicio pueda obtener todas las sucursales.
+     * Se simula una lista de SucursalDTO y se verifica que el servicio las retorne correctamente.
+     */
     @Test
     void testObtenerSucursalesSuccess() {
         List<SucursalDTO> sucursales = Arrays.asList(new SucursalDTO(), new SucursalDTO());
@@ -101,7 +122,10 @@ class InventarioServiceTest {
         assertEquals(sucursales, result);
         verify(sucursalClient).obtenerTodasSucursales();
     }
-
+    /**
+     * Verifica que el servicio pueda obtener todas las sucursales.
+     * Se simula una excepción y se verifica que el servicio retorne una lista vacía.
+     */
     @Test
     void testObtenerSucursalesException() {
         when(sucursalClient.obtenerTodasSucursales()).thenThrow(new RuntimeException("error"));

@@ -5,18 +5,28 @@ import cl.perfulandia.inventario.modelo.Producto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.hateoas.EntityModel;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * Test para el ensamblador de modelos de Producto.
+ */
 class ProductoModelAssemblerTest {
-
+    /*
+     * Este test verifica que el ensamblador de modelos de Producto
+     * agrega los enlaces correctos al modelo.
+     */
     private ProductoModelAssembler assembler;
 
+    /**
+     * Configuración inicial antes de cada prueba.
+     */
     @BeforeEach
     void setUp() {
         assembler = new ProductoModelAssembler();
     }
-
+    /**
+     * Verifica que el método toModel agrega los enlaces correctos al modelo de Producto.
+     */
     @Test
     void toModel_debeAgregarLinksCorrectos() {
         // Arrange
