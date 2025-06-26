@@ -11,13 +11,13 @@ import cl.perfulandia.inventario.dto.SucursalDTO;
  * Este cliente Feign se utiliza para interactuar con el servicio de sucursales.
  * Proporciona métodos para obtener todas las sucursales y buscar una sucursal por su ID.
  */
-@FeignClient(name = "sucursal-service", url = "http://localhost:8080")
+@FeignClient(name = "sucursal-service", url = "https://sucursal-sche.onrender.com")
 public interface SucursalClient {
     /*
      * Obtiene todas las sucursales disponibles.
      * @return Una lista de SucursalDTO que representa todas las sucursales.
      */
-    @GetMapping("/api/sucursal")
+    @GetMapping("/api/sucursales/listar")
     List<SucursalDTO> obtenerTodasSucursales();
 
     /*
@@ -25,7 +25,7 @@ public interface SucursalClient {
      * @param id El ID de la sucursal a buscar.
      * @return Un SucursalDTO que representa la sucursal encontrada.
      */
-    @GetMapping("/api/sucursal/{id}")
+    @GetMapping("/api/sucursales/sucursal/{id}")
     SucursalDTO obtenerSucursalPorId(@PathVariable("id") Long id);
 }
 

@@ -131,7 +131,7 @@ public class InventarioControlador {
      * Endpoint para listar todas las sucursales.
      * Devuelve una lista de SucursalDTO con enlaces HATEOAS.
      */
-    @GetMapping("/sucursales")
+    @GetMapping("/listar")
     public ResponseEntity<List<SucursalDTO>> obtenerSucursales() {
         logger.info("Obteniendo lista de sucursales");
         List<SucursalDTO> sucursales = inventarioService.obtenerSucursales();
